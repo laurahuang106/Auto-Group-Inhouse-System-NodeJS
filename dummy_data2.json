@@ -1,0 +1,49 @@
+db.createCollection("users")
+db.createCollection("vehicles")
+db.createCollection("buyin_records")
+db.createCollection("sale_records")
+
+
+{
+    "VIN": "GKWOSMTWFEEXFMUQQ",
+    "make": "Honda",
+    "model": "Civic",
+    "year_of_production": 2021,
+    "mileage": 22375,
+    "fuel_type": "Diesel",
+    "branch_location": "Lafayette, IN",
+    "buy_in_price": 12517,
+        "buy_in_date": "2023-01-06 14:40:41",
+        "reconditioning_cost": 346
+  }
+  
+  
+  {
+    "user_id": 2698131582,
+    "f_name": "Mike",
+    "l_name": "Lee",
+    "email": "mikelee2022@gmail.com",
+    "phone": "765-765-7705",
+    "branch": "Lafayette, IN",
+    "employee_type": "NORMAL_USER",
+    "gender": "male",
+    "date_of_birth": "1992-05-06",
+  }
+  
+  {
+    "saleDate": "2023-03-18 15:09:34",
+    "sale_price": 17999,
+    "sales_person_id": 2698131582, 
+    "vehicle_id": "65809daabdd23af2f4e83e13", 
+    "buy_in_price": 12517,
+    "reconditioning_cost": 346,
+    "profit": 5482
+  }
+  
+  {
+    "buyinDate": "2023-01-06 11:49:25",
+    "vehicle_id": "xxxxxxxx", 
+    "sales_person_id": 2698131582, 
+    "buyin_price": 12517,
+  }
+  
