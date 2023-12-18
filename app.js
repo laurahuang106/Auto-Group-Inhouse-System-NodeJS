@@ -31,8 +31,52 @@ app.get('/', async (req, res) => {
 });
 
 app.get('/orders', async (req, res) => {
-    res.render('sale_orders');
+    try {
+        const orders = await db.collection('sale_orders').aggregate([
+            {
+                $lookup: {
+                    from: "vehicles",
+                    localField: "vehicle_id",
+                    foreignField: "_id",
+                    as: "vehicle_info"
+                }
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "sales_person_id",
+                    foreignField: "_id",
+                    as: "sales_person_info"
+                }
+            },
+            {
+                $unwind: "$vehicle_info"
+            },
+            {
+                $unwind: "$sales_person_info"
+            },
+            {
+                $project: {
+                    order_id: "$_id",
+                    make: "$vehicle_info.make",
+                    model: "$vehicle_info.model",
+                    year: "$vehicle_info.year_of_production",
+                    mileage: "$vehicle_info.mileage",
+                    sale_price: "$sale_price",
+                    sale_date: "$sale_date",
+                    profit: "$profit",
+                    sales_person_name: { $concat: ["$sales_person_info.f_name", " ", "$sales_person_info.l_name"] },
+                    store_branch: "$sales_person_info.branch"
+                }
+            }
+        ]).toArray();
+
+        res.render('sale_orders', { orders });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
 });
+
 
 app.get('/inventory', async (req, res) => {
     try {

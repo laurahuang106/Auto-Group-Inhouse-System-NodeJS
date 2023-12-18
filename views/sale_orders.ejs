@@ -77,18 +77,33 @@
             <table>
                 <thead>
                     <tr>
-                        <th>placeholder header1</th>
-                        <th>placeholder header2</th>
-                        <!-- ... more headers ... -->
+                        <th>Order ID</th>
+                        <th>Sale Date</th>
+                        <th>Make</th>
+                        <th>Model</th>
+                        <th>Year</th>
+                        <th>Mileage</th>
+                        <th>Sale Price</th>
+                        <th>Profit</th>
+                        <th>Sales Name</th>
+                        <th>Store Branch</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>placeholder data1</td>
-                        <td>placeholder data2</td>
-                        <!-- ... more data rows ... -->
-                    </tr>
-                    <!-- ... additional data rows ... -->
+                    <% orders.forEach(order => { %>
+                        <tr>
+                            <td><%= order.order_id %></td>
+                            <td><%= order.sale_date %></td>
+                            <td><%= order.make %></td>
+                            <td><%= order.model %></td>
+                            <td><%= order.year %></td>
+                            <td><%= order.mileage %></td>
+                            <td>$<%= order.sale_price %></td>
+                            <td>$<%= order.profit %></td>
+                            <td><%= order.sales_person_name %></td>
+                            <td><%= order.store_branch %></td>
+                        </tr>
+                    <% }) %>
                 </tbody>
             </table>
         </div>
