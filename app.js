@@ -18,4 +18,12 @@ app.get('/orders', async (req, res) => {
     res.render('sale_orders')
 });
 
+app.get('/inventory', async (req, res) => {
+    res.render('inventory')
+});
+
+app.get('/buyin_report', async (req, res) => {
+    res.render('buyin_report')
+});
+
 app.listen(port)

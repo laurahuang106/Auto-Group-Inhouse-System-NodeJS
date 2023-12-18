@@ -58,6 +58,10 @@ li a:hover {
     border: 1px solid #ddd;
 }
 
+.search-filter-container input[type="text"]{
+    width: calc(100% - 16px);
+}
+
 /* Main Content Container */
 .main-container {
     display: flex;
