@@ -1,0 +1,45 @@
+/* styles.css */
+
+body {
+    font-family: 'Arial', sans-serif;
+}
+
+h1 {
+    color: #BD1C1D;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #BD1C1D;
+    display: flex;                 /* Enable flexbox */
+    justify-content: space-around; /* Distribute space around items */
+    width: 100%;                   /* Set width to full screen */
+}
+
+li {
+    flex-grow: 1;                  /* Allow each item to grow */
+    text-align: center;            /* Center text within each item */
+}
+
+li a {
+    display: block;
+    color: white;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover {
+    background-color: #911c1b;
+}
+
+/* Responsive */
+@media screen and (max-width: 600px) {
+    ul {
+        flex-direction: column; /* Stack items vertically on smaller screens */
+    }
+}
