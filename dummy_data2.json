@@ -3,7 +3,7 @@ db.createCollection("vehicles")
 db.createCollection("buyin_records")
 db.createCollection("sale_records")
 
-
+// vehicle collection
 {
     "VIN": "GKWOSMTWFEEXFMUQQ",
     "make": "Honda",
@@ -13,23 +13,35 @@ db.createCollection("sale_records")
     "fuel_type": "Diesel",
     "branch_location": "Lafayette, IN",
     "buy_in_price": 12517,
-        "buy_in_date": "2023-01-06 14:40:41",
-        "reconditioning_cost": 346
+    "buy_in_date": "2023-01-06T10:10:00Z",
+    "reconditioning_cost": 346
   }
   
-  
+
+  //users
   {
-    "user_id": 2698131582,
     "f_name": "Mike",
     "l_name": "Lee",
     "email": "mikelee2022@gmail.com",
     "phone": "765-765-7705",
     "branch": "Lafayette, IN",
     "employee_type": "NORMAL_USER",
-    "gender": "male",
-    "date_of_birth": "1992-05-06",
+    "gender": "Male",
+    "date_of_birth": "1992-05-06"
+  }
+
+  {
+    "f_name": "Lucy",
+    "l_name": "White",
+    "email": "lucywhite@hotmail.com",
+    "phone": "765-080-8805",
+    "branch": "Atlanta, TX",
+    "employee_type": "NORMAL_USER",
+    "gender": "Female",
+    "date_of_birth": "1990-02-26"
   }
   
+  //sale
   {
     "saleDate": "2023-03-18 15:09:34",
     "sale_price": 17999,
@@ -40,10 +52,18 @@ db.createCollection("sale_records")
     "profit": 5482
   }
   
+  //buyin
   {
-    "buyinDate": "2023-01-06 11:49:25",
+    "buyin_date": "2023-01-06T10:10:00Z",
     "vehicle_id": "xxxxxxxx", 
     "sales_person_id": 2698131582, 
-    "buyin_price": 12517,
+    "buyin_price": 12517
+  }
+  
+  {
+    "buyin_date": "2023-12-18T15:10:00Z",
+    "vehicle_id": "6580a823bdd23af2f4f0b14e", 
+    "sales_person_id": "6580a8f8bdd23af2f4f15a99", 
+    "buyin_price": 16640
   }
   

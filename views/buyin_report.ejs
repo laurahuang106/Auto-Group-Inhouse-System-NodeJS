@@ -2,36 +2,36 @@
 <body>
   <form action="/buyin_report" method="post">
     <div>
-      <label for="">VIN</label>
-      <input type="text" />
+      <label for="vin">VIN</label>
+      <input type="text" name="vin" id="vin" />
     </div>
     <div>
-      <label for="">Make</label>
-      <input type="text" />
+      <label for="make">Make</label>
+      <input type="text" name="make" id="make" />
     </div>
     <div>
-      <label for="">Model</label>
-      <input type="text" />
+      <label for="model">Model</label>
+      <input type="text" name="model" id="model" />
     </div>
     <div>
-      <label for="">Year</label>
-      <input type="text" />
+      <label for="year">Year</label>
+      <input type="number" name="year" id="year" />
     </div>
     <div>
-      <label for="">Mileage</label>
-      <input type="text" />
+      <label for="mileage">Mileage</label>
+      <input type="number" name="mileage" id="mileage" />
     </div>
     <div>
-      <label for="">Fuel type</label>
-      <input type="text" />
+      <label for="fuel_type">Fuel type</label>
+      <input type="text" name="fuel_type" id="fuel_type" />
     </div>
     <div>
-      <label for="">Buyin Date</label>
-      <input type="text" />
+      <label for="buyin_date">Buyin Date</label>
+      <input type="datetime-local" name="buyin_date" id="buyin_date" />
     </div>
     <div>
-      <label for="">Buyin Price</label>
-      <input type="text" />
+      <label for="buyin_price">Buyin Price</label>
+      <input type="number" name="buyin_price" id="buyin_price" />
     </div>
     <button type="submit">Submit</button>
   </form>
