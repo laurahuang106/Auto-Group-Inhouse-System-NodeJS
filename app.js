@@ -26,4 +26,8 @@ app.get('/buyin_report', async (req, res) => {
     res.render('buyin_report')
 });
 
+app.get('/profile', async (req, res) => {
+    res.render('profile')
+});
+
 app.listen(port)
