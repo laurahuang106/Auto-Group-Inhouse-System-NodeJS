@@ -1,0 +1,98 @@
+<body>
+    <%- include("./header.ejs") %>
+    <div class="main-container">
+        <!-- Left section for search bar and filters -->
+        <div class="search-filter-container">
+            <h1>Detailed Sales Report</h1>
+
+            <form action="./sale_orders.ejs" method="post">
+                <!-- search bar -->
+                <input type="text" name="search_term" placeholder="Search by make or model..." />
+
+                <!-- filters -->
+                <label for="start_date_dropdown">Start Date</label>
+                <select name="start_date_dropdown" id="start_date_dropdown">
+                    <option value="" selected></option>
+                    <option value="">placeholder add option</option>
+                </select>
+
+                <label for="end_date_dropdown">End Date</label>
+                <select name="end_date_dropdown" id="end_date_dropdown">
+                    <option value="" selected></option>
+                    <option value="">placeholder</option>
+                </select>
+                
+                <label for="employee_dropdown">Sales Person</label>
+                <select name="employee_dropdown" id="employee_dropdown">
+                    <option value="" selected></option>
+                    <option value="">placeholder</option>
+                </select>
+
+                <label for="branch_dropdown">Branch</label>
+                <select name="branch_dropdown" id="branch_dropdown">
+                    <option value="" selected></option>
+                    <option value="">placeholder</option>
+                </select>
+
+                <label for="make_dropdown">Make</label>
+                <select name="make_dropdown" id="make_dropdown">
+                    <option value="" selected></option>
+                    <option value="">placeholder</option>
+                </select>
+
+                <label for="model_dropdown">Model</label>
+                <select name="model_dropdown" id="model_dropdown">
+                    <option value="" selected></option>
+                    <option value="">placeholder</option>
+                </select>
+
+                <label for="min_year_dropdown">Minimum Production Year</label>
+                <select name="min_year_dropdown" id="min_year_dropdown">
+                    <option value="" selected></option>
+                    <option value="">placeholder</option>
+                </select>
+
+                <label for="max_year_dropdown">Maximum Production Year</label>
+                <select name="max_year_dropdown" id="max_year_dropdown">
+                    <option value="" selected></option>
+                    <option value="">placeholder</option>
+                </select>
+
+                <label for="min_mile_dropdown">Minimum Mileage</label>
+                <select name="min_mile_dropdown" id="min_mile_dropdown">
+                    <option value="" selected></option>
+                    <option value="">placeholder</option>
+                </select>
+
+                <label for="max_mile_dropdown">Maximum Mileage</label>
+                <select name="max_mile_dropdown" id="max_mile_dropdown">
+                    <option value="" selected></option>
+                    <option value="">placeholder</option>
+                </select>
+            </form>
+        </div>
+
+        <!-- Right section for table -->
+        <div class="report-section">
+            <table>
+                <thead>
+                    <tr>
+                        <th>placeholder header1</th>
+                        <th>placeholder header2</th>
+                        <!-- ... more headers ... -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>placeholder data1</td>
+                        <td>placeholder data2</td>
+                        <!-- ... more data rows ... -->
+                    </tr>
+                    <!-- ... additional data rows ... -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
+

@@ -14,4 +14,8 @@ app.get('/', async (req, res) => {
     res.render('index')
 });
 
+app.get('/orders', async (req, res) => {
+    res.render('sale_orders')
+});
+
 app.listen(port)
