@@ -1,6 +1,6 @@
 require('dotenv').config()
 const express = require('express');
-const { MongoClient } = require('mongodb');
+const { MongoClient, ObjectId } = require('mongodb');
 
 const app = express();
 const port = 3000;
@@ -13,8 +13,6 @@ const url = `mongodb+srv://laurah:${process.env.DB_PASSWORD}@cluster0.vomr88x.mo
 const dbName = 'autoGroup';
 let db;
 
-// placeholder need change to dynamic
-const current_user_id = "65809c3de660c823d34232e9"
 
 // Connect to MongoDB
 MongoClient.connect(url)
@@ -88,7 +86,7 @@ app.get('/inventory', async (req, res) => {
             sortCriteria[field] = order === 'asc' ? 1 : -1;
         } else {
             // Default sorting
-            sortCriteria = { buyin_date: -1, VIN: -1, make: -1, model: -1, year: -1, mileage: -1, buyin_price: -1, sales_person_name: -1, branch_location: -1} 
+            sortCriteria = { buyin_date: -1, VIN: -1, make: -1, model: -1, year: -1, mileage: -1, buyin_price: -1} 
         }
 
 
@@ -115,11 +113,11 @@ app.get('/inventory', async (req, res) => {
             {
                 $unwind: "$sales_person_info"
             },
-            {
-                $match: {
-                    'vehicle_info.status': 'Active'
-                }
-            },
+            // {
+            //     $match: {
+            //         'vehicle_info.status': 'Active'
+            //     }
+            // },
             {
                 $project: {
                     VIN: "$vehicle_info.VIN",
@@ -132,12 +130,15 @@ app.get('/inventory', async (req, res) => {
                     sales_person_name: { $concat: ["$sales_person_info.f_name", " ", "$sales_person_info.l_name"] },
                     store_branch: "$sales_person_info.branch"
                 }
+            },
+            {
+                $sort: sortCriteria
             }
-        ]).sort(sortCriteria).toArray();
+        ]).toArray();
 
         // Prepare sorting status for next request
         const nextSortingStatus = {
-            make: sortParam === 'buyin_date_asc' ? 'buyin_date_desc' : 'buyin_date_asc',
+            buyin_date: sortParam === 'buyin_date_asc' ? 'buyin_date_desc' : 'buyin_date_asc',
             make: sortParam === 'make_asc' ? 'make_desc' : 'make_asc',
             VIN: sortParam === 'VIN_asc' ? 'VIN_desc' : 'VIN_asc',
             model: sortParam === 'model_asc' ? 'model_desc' : 'model_asc',
@@ -166,8 +167,8 @@ app.post('/buyin_report', async (req, res) => {
         const reconditioning_cost = 0
 
         // placeholder, hardcoded user and branch 
-        const user_id = "65809c3de660c823d34232e9"
-        const branch_location = "Lafayette, IN"
+        const user_id = "65822220bdd23af2f423260f"
+        const branch_location = "Champaign, IL"
         const status = 'Active'
 
         // capitalize input and trim left and right spaces
@@ -199,7 +200,7 @@ app.post('/buyin_report', async (req, res) => {
         const buyinRecordData = {
             buyin_date: new Date(formData.buyin_date),
             vehicle_id: vehicleId,
-            sales_person_id: ObjectId(user_id), 
+            sales_person_id: new ObjectId(user_id), 
             buyin_price: parseFloat(formData.buyin_price)
         };
 

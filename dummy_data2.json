@@ -40,6 +40,17 @@ db.createCollection("sale_records")
     "gender": "Female",
     "date_of_birth": "1990-02-26"
   }
+
+  {
+    "f_name": "Judy",
+    "l_name": "Brown",
+    "email": "Judybrown@hotmail.com",
+    "phone": "765-220-2258",
+    "branch": "Champaign, IL",
+    "employee_type": "NORMAL_USER",
+    "gender": "Female",
+    "date_of_birth": "1988-06-08"
+  }
   
   //sale
   {

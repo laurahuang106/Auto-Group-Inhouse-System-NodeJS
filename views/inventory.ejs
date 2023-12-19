@@ -84,39 +84,39 @@
                     <tr>
                         <th>
                             Buyin Date
-                            <button type="button" onclick="sortTable('buyin_date')"> <%= sorting.buyin_date === 'asc' ? '↑' : '↓' %> </button>
+                            <button type="button" onclick="sortTable('buyin_date')"> <%= sorting.buyin_date && sorting.buyin_date.includes('asc') ? '↑' : '↓' %> </button>
                         </th>
                         <th>
                             VIN
-                            <button type="button" onclick="sortTable('VIN')"> <%= sorting.VIN === 'asc' ? '↑' : '↓' %> </button>
+                            <button type="button" onclick="sortTable('VIN')"> <%= sorting.VIN && sorting.VIN.includes('asc') ? '↑' : '↓' %> </button>
                         </th>
                         <th>
                             Make
-                            <button type="button" onclick="sortTable('make')"> <%= sorting.make === 'asc' ? '↑' : '↓' %> </button>
+                            <button type="button" onclick="sortTable('make')"> <%= sorting.make && sorting.make.includes('asc') ? '↑' : '↓' %> </button>
                         </th>
                         <th>
                             Model
-                            <button type="button" onclick="sortTable('model')"> <%= sorting.model === 'asc' ? '↑' : '↓' %> </button>
+                            <button type="button" onclick="sortTable('model')"> <%= sorting.model && sorting.model.includes('asc') ? '↑' : '↓' %> </button>
                         </th>
                         <th>
                             Year
-                            <button type="button" onclick="sortTable('year')"> <%= sorting.year === 'asc' ? '↑' : '↓' %> </button>
+                            <button type="button" onclick="sortTable('year')"> <%= sorting.year && sorting.year.includes('asc') ? '↑' : '↓' %> </button>
                         </th>
                         <th>
                             Mileage
-                            <button type="button" onclick="sortTable('mileage')"> <%= sorting.mileage === 'asc' ? '↑' : '↓' %> </button>
+                            <button type="button" onclick="sortTable('mileage')"> <%= sorting.mileage && sorting.mileage.includes('asc') ? '↑' : '↓' %> </button>
                         </th>
                         <th>
                             Buyin Price
-                            <button type="button" onclick="sortTable('buyin_price')"> <%= sorting.buyin_price === 'asc' ? '↑' : '↓' %> </button>
+                            <button type="button" onclick="sortTable('buyin_price')"> <%= sorting.buyin_price && sorting.buyin_price.includes('asc') ? '↑' : '↓' %> </button>
                         </th>
                         <th>
                             Sales Name
-                            <button type="button" onclick="sortTable('sales_person_name')"> <%= sorting.sales_person_name === 'asc' ? '↑' : '↓' %> </button>
+                            <button type="button" onclick="sortTable('sales_person_name')"> <%= sorting.sales_person_name && sorting.sales_person_name.includes('asc') ? '↑' : '↓' %> </button>
                         </th>
                         <th>
                             Store Branch
-                            <button type="button" onclick="sortTable('store_branch')"> <%= sorting.store_branch === 'asc' ? '↑' : '↓' %> </button>
+                            <button type="button" onclick="sortTable('store_branch')"> <%= sorting.store_branch && sorting.store_branch.includes('asc') ? '↑' : '↓' %> </button>
                         </th>
                     </tr>
                 </thead>
@@ -137,16 +137,16 @@
                 </tbody>
             </table>
         </div>
-    </div>
-
-    <script>
-        function sortTable(column) {
-            const currentOrder = document.getElementById('sort_input').value;
-            const newOrder = currentOrder === column + '_asc' ? column + '_desc' : column + '_asc';
-            document.getElementById('sort_input').value = newOrder;
-            document.getElementById('sort_form').submit();
-        }
-    </script>
+        
+        <script>
+            function sortTable(column) {
+                const currentOrder = document.getElementById('sort_input').value;
+                const newOrder = currentOrder === column + '_asc' ? column + '_desc' : column + '_asc';
+                document.getElementById('sort_input').value = newOrder;
+                document.getElementById('sort_form').submit();
+            }
+        </script>
+        
 </body>
 </html>
 
