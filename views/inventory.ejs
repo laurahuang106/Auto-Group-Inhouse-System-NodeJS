@@ -73,24 +73,36 @@
         </div>
 
         <!-- Right section for table -->
+        <!-- Right section for table -->
         <div class="report-section">
             <table>
                 <thead>
                     <tr>
-                        <th>placeholder header1</th>
-                        <th>placeholder header2</th>
-                        <th>Status</th>
-                        <!-- ... more headers ... -->
+                        <th>VIN</th>
+                        <th>Make</th>
+                        <th>Model</th>
+                        <th>Year</th>
+                        <th>Mileage</th>
+                        <th>Buyin Price</th>
+                        <th>Buyin Date</th>
+                        <th>Sales Name</th>
+                        <th>Store Branch</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>placeholder data1</td>
-                        <td>placeholder data2</td>
-                        <td><button type="submit">placeholder sold? active?</button> </td>
-                        <!-- ... more data rows ... -->
-                    </tr>
-                    <!-- ... additional data rows ... -->
+                    <% records.forEach(record => { %>
+                        <tr>
+                            <td><%= record.VIN %></td>
+                            <td><%= record.make %></td>
+                            <td><%= record.model %></td>
+                            <td><%= record.year %></td>
+                            <td><%= record.mileage %></td>
+                            <td>$<%= record.buyin_price %></td>
+                            <td><%= record.buyin_date %></td>
+                            <td><%= record.sales_person_name %></td>
+                            <td><%= record.store_branch %></td>
+                        </tr>
+                    <% }) %>
                 </tbody>
             </table>
         </div>

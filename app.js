@@ -63,7 +63,7 @@ app.get('/orders', async (req, res) => {
                     year: "$vehicle_info.year_of_production",
                     mileage: "$vehicle_info.mileage",
                     sale_price: "$sale_price",
-                    sale_date: "$sale_date",
+                    sale_date: {"$dateToString": {format: "%Y-%m-%d", date: "$sale_date"}},
                     profit: "$profit",
                     sales_person_name: { $concat: ["$sales_person_info.f_name", " ", "$sales_person_info.l_name"] },
                     store_branch: "$sales_person_info.branch"
@@ -80,12 +80,50 @@ app.get('/orders', async (req, res) => {
 
 app.get('/inventory', async (req, res) => {
     try {
-        const vehicles = await db.collection('vehicles').find({}).toArray();
-        res.render('inventory', { vehicles: vehicles }); 
+        const records = await db.collection('buyin_records').aggregate([
+            {
+                $lookup: {
+                    from: "vehicles",
+                    localField: "vehicle_id",
+                    foreignField: "_id",
+                    as: "vehicle_info"
+                }
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "sales_person_id",
+                    foreignField: "_id",
+                    as: "sales_person_info"
+                }
+            },
+            {
+                $unwind: "$vehicle_info"
+            },
+            {
+                $unwind: "$sales_person_info"
+            },
+            {
+                $project: {
+                    VIN: "$vehicle_info.VIN",
+                    make: "$vehicle_info.make",
+                    model: "$vehicle_info.model",
+                    year: "$vehicle_info.year_of_production",
+                    mileage: "$vehicle_info.mileage",
+                    buyin_price: "$buyin_price",
+                    buyin_date: {"$dateToString": {format: "%Y-%m-%d", date: "$buyin_date"}},
+                    sales_person_name: { $concat: ["$sales_person_info.f_name", " ", "$sales_person_info.l_name"] },
+                    store_branch: "$sales_person_info.branch"
+                }
+            }
+        ]).toArray();
+
+        res.render('inventory', { records });
     } catch (error) {
-        res.status(500).send(error);
+        res.status(500).send(error.message);
     }
 });
+
 
 app.get('/buyin_report', async (req, res) => {
     res.render('buyin_report');
