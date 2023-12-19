@@ -137,20 +137,27 @@ app.post('/buyin_report', async (req, res) => {
         // placeholder, hardcoded user and branch 
         const user_id = "65809c3de660c823d34232e9"
         const branch_location = "Lafayette, IN"
+        const status = 'Active'
+
+        // capitalize input and trim left and right spaces
+        function capitalizeFirstWord(string) {
+            return string.trim().replace(/^\w/, c => c.toUpperCase());
+        }
 
         // Extract form data
         const formData = req.body;
         const vehicleData = {
-            VIN: formData.vin,
-            make: formData.make,
-            model: formData.model,
-            year_of_production: formData.year,
-            mileage: formData.mileage,
-            fuel_type: formData.fuel_type,
-            branch_location: branch_location,
-            buyin_date: formData.buyin_date,
-            buyin_price: formData.buyin_price,
-            reconditioning_cost: reconditioning_cost,
+            VIN: capitalizeFirstWord(formData.vin),
+            make: capitalizeFirstWord(formData.make),
+            model: capitalizeFirstWord(formData.model),
+            year_of_production: parseInt(formData.year),
+            mileage: parseInt(formData.mileage),
+            fuel_type: capitalizeFirstWord(formData.fuel_type),
+            branch_location: capitalizeFirstWord(branch_location),
+            buyin_date: new Date(formData.buyin_date),
+            buyin_price: parseFloat(formData.buyin_price),
+            reconditioning_cost: parseFloat(reconditioning_cost),
+            status: status
         };
 
         // Insert vehicle data into the 'vehicles' collection
@@ -159,10 +166,10 @@ app.post('/buyin_report', async (req, res) => {
 
         // Prepare buyin record data
         const buyinRecordData = {
-            buyin_date: formData.buyin_date,
+            buyin_date: new Date(formData.buyin_date),
             vehicle_id: vehicleId,
-            sales_person_id: user_id, 
-            buyin_price: formData.buyin_price
+            sales_person_id: ObjectId(user_id), 
+            buyin_price: parseFloat(formData.buyin_price)
         };
 
         // Insert buyin record into the 'buyin_records' collection

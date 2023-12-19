@@ -77,8 +77,8 @@
             <table>
                 <thead>
                     <tr>
+                        <th>Order Date</th>
                         <th>Order ID</th>
-                        <th>Sale Date</th>
                         <th>Make</th>
                         <th>Model</th>
                         <th>Year</th>
@@ -92,8 +92,8 @@
                 <tbody>
                     <% orders.forEach(order => { %>
                         <tr>
-                            <td><%= order.order_id %></td>
                             <td><%= order.sale_date %></td>
+                            <td><%= order.order_id %></td>
                             <td><%= order.make %></td>
                             <td><%= order.model %></td>
                             <td><%= order.year %></td>
