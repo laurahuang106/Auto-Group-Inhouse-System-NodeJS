@@ -80,6 +80,18 @@ app.get('/orders', async (req, res) => {
 
 app.get('/inventory', async (req, res) => {
     try {
+        let sortCriteria = {};
+        const sortParam = req.query.sort;
+        
+        if (sortParam) {
+            const [field, order] = sortParam.split('_');
+            sortCriteria[field] = order === 'asc' ? 1 : -1;
+        } else {
+            // Default sorting
+            sortCriteria = { buyin_date: -1, VIN: -1, make: -1, model: -1, year: -1, mileage: -1, buyin_price: -1, sales_person_name: -1, branch_location: -1} 
+        }
+
+
         const records = await db.collection('buyin_records').aggregate([
             {
                 $lookup: {
@@ -104,6 +116,11 @@ app.get('/inventory', async (req, res) => {
                 $unwind: "$sales_person_info"
             },
             {
+                $match: {
+                    'vehicle_info.status': 'Active'
+                }
+            },
+            {
                 $project: {
                     VIN: "$vehicle_info.VIN",
                     make: "$vehicle_info.make",
@@ -116,9 +133,23 @@ app.get('/inventory', async (req, res) => {
                     store_branch: "$sales_person_info.branch"
                 }
             }
-        ]).toArray();
+        ]).sort(sortCriteria).toArray();
 
-        res.render('inventory', { records });
+        // Prepare sorting status for next request
+        const nextSortingStatus = {
+            make: sortParam === 'buyin_date_asc' ? 'buyin_date_desc' : 'buyin_date_asc',
+            make: sortParam === 'make_asc' ? 'make_desc' : 'make_asc',
+            VIN: sortParam === 'VIN_asc' ? 'VIN_desc' : 'VIN_asc',
+            model: sortParam === 'model_asc' ? 'model_desc' : 'model_asc',
+            year: sortParam === 'year_asc' ? 'year_desc' : 'year_asc',
+            mileage: sortParam === 'mileage_asc' ? 'mileage_desc' : 'mileage_asc',
+            buyin_price: sortParam === 'buyin_price_asc' ? 'buyin_price_desc' : 'buyin_price_asc',
+            sales_person_name: sortParam === 'sales_person_name_asc' ? 'sales_person_name_desc' : 'sales_person_name_asc',
+            store_branch: sortParam === 'store_branch_asc' ? 'store_branch_desc' : 'store_branch_asc',
+            buyin_date: sortParam === 'buyin_date_asc' ? 'buyin_date_desc' : 'buyin_date_asc'
+        };
+        
+        res.render('inventory', { records, sorting: nextSortingStatus });
     } catch (error) {
         res.status(500).send(error.message);
     }
