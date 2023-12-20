@@ -5,7 +5,7 @@
         <div class="search-filter-container">
             <h1>Inventory Report</h1>
 
-            <form id="filter_form" action="./sale_orders.ejs" method="post">
+            <form id="filter_form" action="./inventory" method="get">
                 <div>
                     <label for="start_date_dropdown">Report Start Date</label>
                     <input type="date" name="start_date" id="start_date_dropdown">
@@ -19,8 +19,8 @@
                 <label for="employee_dropdown">Sales Person</label>
                 <select name="employee_dropdown" id="employee_dropdown">
                     <option value="" selected></option>
-                    <% sales_person_names.forEach(function(sales_person_name) { %>
-                        <option value="<%= sales_person_name %>"><%= sales_person_name %></option>
+                    <% sales_person_fullnames.forEach(function(sales_person) { %>
+                        <option value="<%= sales_person.fullname %>"><%= sales_person.fullname %></option>
                     <% }); %>
                 </select>
 
@@ -114,7 +114,7 @@
                             <td><%= record.year %></td>
                             <td><%= record.mileage %></td>
                             <td>$<%= record.buyin_price %></td>
-                            <td><%= record.sales_person_name %></td>
+                            <td><%= record.sales_person_fullname %></td>
                             <td><%= record.store_branch %></td>
                         </tr>
                     <% }) %>

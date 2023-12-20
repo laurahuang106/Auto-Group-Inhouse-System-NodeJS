@@ -81,13 +81,17 @@ app.get('/inventory', async (req, res) => {
         let filterCriteria = {};
 
         // fetch filters data 
-    
-        //placeholder need change only first name
         const branches = await db.collection('users').distinct('branch');
-        const sales_person_names= await db.collection('users').distinct('f_name');
         const buyin_dates = await db.collection('buyin_records').distinct('buyin_date');
         const makes = await db.collection('vehicles').distinct('make');
         const models = await db.collection('vehicles').distinct('model');
+        const sales_person_fullnames = await db.collection('users').aggregate([
+            {
+                $project: {
+                    fullname: { $concat: ["$f_name", " ", "$l_name"] }
+                }
+            }
+        ]).toArray();
 
         /// find the minimum and maximum year of production
         const yearRangeResult = await db.collection('vehicles').aggregate([
@@ -116,16 +120,17 @@ app.get('/inventory', async (req, res) => {
         }
 
         // add filterCrititeria based on user's choice
-        if (req.query.start_date_dropdown && req.query.start_date_dropdown !== '') {
-            filterCriteria['buyin_date'] = query.start_date_dropdown;
+        if (req.query.start_date) {
+            filterCriteria['buyin_date'] = { $gte: new Date(req.query.start_date) };
         }
-
-        if (req.query.end_date_dropdown && req.query.end_date_dropdown !== '') {
-            filterCriteria['buyin_records.branch'] = req.query.end_date_dropdown;
+        if (req.query.end_date) {
+            filterCriteria['buyin_date'] = { ...filterCriteria['buyin_date'], $lte: new Date(req.query.end_date) };
         }
 
         if (req.query.employee_dropdown && req.query.employee_dropdown !== '') {
-            filterCriteria['sales_person_info._id'] = new ObjectId(req.query.employee_dropdown);
+            const [f_name, ...l_name] = req.query.employee_dropdown.split(" ");
+            filterCriteria['sales_person_info.f_name'] = f_name;
+            filterCriteria['sales_person_info.l_name'] = l_name.join(" "); 
         }
 
         if (req.query.branch_dropdown && req.query.branch_dropdown !== '') {
@@ -196,7 +201,7 @@ app.get('/inventory', async (req, res) => {
                     mileage: "$vehicle_info.mileage",
                     buyin_price: "$buyin_price",
                     buyin_date: {"$dateToString": {format: "%Y-%m-%d", date: "$buyin_date"}},
-                    sales_person_name: { $concat: ["$sales_person_info.f_name", " ", "$sales_person_info.l_name"] },
+                    sales_person_fullname: { $concat: ["$sales_person_info.f_name", " ", "$sales_person_info.l_name"] },
                     store_branch: "$sales_person_info.branch"
                 }
             },
@@ -213,13 +218,12 @@ app.get('/inventory', async (req, res) => {
             years,
             mileages,
             branches,
-            sales_person_names,
+            sales_person_fullnames,
         });
     } catch (error) {
         res.status(500).send(error.message);
     }
 });
-
 
 app.get('/buyin_report', async (req, res) => {
     res.render('buyin_report');
