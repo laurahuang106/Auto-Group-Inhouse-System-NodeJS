@@ -219,6 +219,7 @@ app.get('/inventory', async (req, res) => {
             mileages,
             branches,
             sales_person_fullnames,
+            query: req.query
         });
     } catch (error) {
         res.status(500).send(error.message);
