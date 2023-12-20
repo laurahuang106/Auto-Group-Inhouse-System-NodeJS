@@ -1,74 +1,90 @@
 <%- include("./header.ejs") %>
 <body>
     <div class="main-container">
-        <!-- Left section for search bar and filters -->
+        <!-- Left section for filters -->
         <div class="search-filter-container">
             <h1>Inventory Report</h1>
 
-            <form action="./sale_orders.ejs" method="post">
-                <!-- search bar -->
-                <input type="text" name="search_term" placeholder="Search by make or model..." />
+            <form id="filter_form" action="./sale_orders.ejs" method="post">
+                <div>
+                    <label for="start_date_dropdown">Report Start Date</label>
+                    <input type="date" name="start_date" id="start_date_dropdown">
+                </div>
 
-                <!-- filters -->
-                <label for="start_date_dropdown">Start Date</label>
-                <select name="start_date_dropdown" id="start_date_dropdown">
-                    <option value="" selected></option>
-                    <option value="">placeholder add option</option>
-                </select>
-
-                <label for="end_date_dropdown">End Date</label>
-                <select name="end_date_dropdown" id="end_date_dropdown">
-                    <option value="" selected></option>
-                    <option value="">placeholder</option>
-                </select>
+                <div>
+                    <label for="end_date_dropdown">Report End Date</label>
+                    <input type="date" name="end_date" id="end_date_dropdown">
+                </div>
                 
                 <label for="employee_dropdown">Sales Person</label>
                 <select name="employee_dropdown" id="employee_dropdown">
                     <option value="" selected></option>
-                    <option value="">placeholder</option>
+                    <% sales_person_names.forEach(function(sales_person_name) { %>
+                        <option value="<%= sales_person_name %>"><%= sales_person_name %></option>
+                    <% }); %>
                 </select>
 
                 <label for="branch_dropdown">Branch</label>
                 <select name="branch_dropdown" id="branch_dropdown">
                     <option value="" selected></option>
-                    <option value="">placeholder</option>
+                    <% branches.forEach(function(branch) { %>
+                        <option value="<%= branch %>"><%= branch %></option>
+                    <% }); %>
                 </select>
 
                 <label for="make_dropdown">Make</label>
                 <select name="make_dropdown" id="make_dropdown">
                     <option value="" selected></option>
-                    <option value="">placeholder</option>
+                    <% makes.forEach(function(make) { %>
+                        <option value="<%= make %>"><%= make %></option>
+                    <% }); %>
                 </select>
 
                 <label for="model_dropdown">Model</label>
                 <select name="model_dropdown" id="model_dropdown">
                     <option value="" selected></option>
-                    <option value="">placeholder</option>
+                    <% models.forEach(function(model) { %>
+                        <option value="<%= model %>"><%= model %></option>
+                    <% }); %>
                 </select>
 
                 <label for="min_year_dropdown">Minimum Production Year</label>
                 <select name="min_year_dropdown" id="min_year_dropdown">
                     <option value="" selected></option>
-                    <option value="">placeholder</option>
+                    <!-- need change placeholder -->
+                    <% years.forEach(function(year) { %>
+                        <option value="<%= year %>"><%= year %></option>
+                    <% }); %>
                 </select>
 
                 <label for="max_year_dropdown">Maximum Production Year</label>
                 <select name="max_year_dropdown" id="max_year_dropdown">
                     <option value="" selected></option>
-                    <option value="">placeholder</option>
+                    <!-- need change placeholder -->
+                    <% years.forEach(function(year) { %>
+                        <option value="<%= year %>"><%= year %></option>
+                    <% }); %>
                 </select>
 
                 <label for="min_mile_dropdown">Minimum Mileage</label>
                 <select name="min_mile_dropdown" id="min_mile_dropdown">
                     <option value="" selected></option>
-                    <option value="">placeholder</option>
+                     <!-- need change placeholder -->
+                     <% mileages.forEach(function(mileage) { %>
+                        <option value="<%= mileage %>"><%= mileage %></option>
+                    <% }); %>
                 </select>
 
                 <label for="max_mile_dropdown">Maximum Mileage</label>
                 <select name="max_mile_dropdown" id="max_mile_dropdown">
                     <option value="" selected></option>
-                    <option value="">placeholder</option>
+                    <!-- need change placeholder -->
+                    <% mileages.forEach(function(mileage) { %>
+                        <option value="<%= mileage %>"><%= mileage %></option>
+                    <% }); %>
                 </select>
+
+                <button type="submit" id="submit_button">Apply Filters</button>
             </form>
         </div>
 
@@ -139,6 +155,51 @@
         </div>
         
         <script>
+            // filters alerts
+            document.addEventListener('DOMContentLoaded', function () {
+                document.getElementById('filter_form').addEventListener('input', validateForm);
+            });
+
+            function validateForm() {
+                console.log('Validating form'); // For debugging purposes
+
+                const startDate = document.getElementById('start_date_dropdown').value;
+                const endDate = document.getElementById('end_date_dropdown').value;
+                const minYear = parseInt(document.getElementById('min_year_dropdown').value);
+                const maxYear = parseInt(document.getElementById('max_year_dropdown').value);
+                const minMileage = parseInt(document.getElementById('min_mile_dropdown').value);
+                const maxMileage = parseInt(document.getElementById('max_mile_dropdown').value);
+                
+                let isValid = true;
+                let errorMessage = '';
+
+                // Validate that end date is not before start date
+                if (startDate && endDate && endDate < startDate) {
+                    isValid = false;
+                    errorMessage += "End date cannot be earlier than start date.\n";
+                }
+
+                // Validate production year range
+                if (minYear && maxYear && parseInt(maxYear) < parseInt(minYear)) {
+                    isValid = false;
+                    errorMessage += "Maximum production year cannot be earlier than minimum production year.\n";
+                }
+
+                // Validate mileage range
+                if (minMileage && maxMileage && parseInt(maxMileage) < parseInt(minMileage)) {
+                    isValid = false;
+                    errorMessage += "Maximum mileage cannot be less than minimum mileage.\n";
+                }
+
+                if (!isValid) {
+                    alert(errorMessage);
+                }
+
+                const submitButton = document.getElementById('submit_button');
+                submitButton.disabled = !isValid;
+            }
+
+            // table filters
             function sortTable(column) {
                 const currentOrder = document.getElementById('sort_input').value;
                 const newOrder = currentOrder === column + '_asc' ? column + '_desc' : column + '_asc';
@@ -146,7 +207,6 @@
                 document.getElementById('sort_form').submit();
             }
         </script>
-        
 </body>
 </html>
 
