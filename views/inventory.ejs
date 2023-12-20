@@ -88,52 +88,20 @@
             </form>
         </div>
 
-        <!-- Sorting Form -->
-        <form id="sort_form" action="/inventory" method="get" style="display: none;">
-            <input type="hidden" name="sort" id="sort_input">
-        </form>
-
         <!-- Table Section -->
         <div class="report-section">
             <table>
                 <thead>
                     <tr>
-                        <th>
-                            Buyin Date
-                            <button type="button" onclick="sortTable('buyin_date')"> <%= sorting.buyin_date && sorting.buyin_date.includes('asc') ? '↑' : '↓' %> </button>
-                        </th>
-                        <th>
-                            VIN
-                            <button type="button" onclick="sortTable('VIN')"> <%= sorting.VIN && sorting.VIN.includes('asc') ? '↑' : '↓' %> </button>
-                        </th>
-                        <th>
-                            Make
-                            <button type="button" onclick="sortTable('make')"> <%= sorting.make && sorting.make.includes('asc') ? '↑' : '↓' %> </button>
-                        </th>
-                        <th>
-                            Model
-                            <button type="button" onclick="sortTable('model')"> <%= sorting.model && sorting.model.includes('asc') ? '↑' : '↓' %> </button>
-                        </th>
-                        <th>
-                            Year
-                            <button type="button" onclick="sortTable('year')"> <%= sorting.year && sorting.year.includes('asc') ? '↑' : '↓' %> </button>
-                        </th>
-                        <th>
-                            Mileage
-                            <button type="button" onclick="sortTable('mileage')"> <%= sorting.mileage && sorting.mileage.includes('asc') ? '↑' : '↓' %> </button>
-                        </th>
-                        <th>
-                            Buyin Price
-                            <button type="button" onclick="sortTable('buyin_price')"> <%= sorting.buyin_price && sorting.buyin_price.includes('asc') ? '↑' : '↓' %> </button>
-                        </th>
-                        <th>
-                            Sales Name
-                            <button type="button" onclick="sortTable('sales_person_name')"> <%= sorting.sales_person_name && sorting.sales_person_name.includes('asc') ? '↑' : '↓' %> </button>
-                        </th>
-                        <th>
-                            Store Branch
-                            <button type="button" onclick="sortTable('store_branch')"> <%= sorting.store_branch && sorting.store_branch.includes('asc') ? '↑' : '↓' %> </button>
-                        </th>
+                        <th>Buyin Date</th>
+                        <th>VIN</th>
+                        <th>Make</th>
+                        <th>Model</th> 
+                        <th>Year</th>
+                        <th>Mileage</th>
+                        <th> Buyin Price</th>
+                        <th>Sales Name</th>
+                        <th>Store Branch</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -197,14 +165,6 @@
 
                 const submitButton = document.getElementById('submit_button');
                 submitButton.disabled = !isValid;
-            }
-
-            // table filters
-            function sortTable(column) {
-                const currentOrder = document.getElementById('sort_input').value;
-                const newOrder = currentOrder === column + '_asc' ? column + '_desc' : column + '_asc';
-                document.getElementById('sort_input').value = newOrder;
-                document.getElementById('sort_form').submit();
             }
         </script>
 </body>
