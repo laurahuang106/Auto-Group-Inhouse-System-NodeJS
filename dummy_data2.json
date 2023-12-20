@@ -51,10 +51,21 @@ db.createCollection("sale_records")
     "gender": "Female",
     "date_of_birth": "1988-06-08"
   }
+
+  {
+    "f_name": "Roy",
+    "l_name": "White",
+    "email": "roywhite@gmail.com",
+    "phone": "585-630-8828",
+    "branch": "Richardson, TX",
+    "employee_type": "NORMAL_USER",
+    "gender": "Male",
+    "date_of_birth": "1996-12-12"
+  }
   
   //sale
   {
-    "saleDate": "2023-03-18 15:09:34",
+    "sale_date": "2023-03-18 15:09:34",
     "sale_price": 17999,
     "sales_person_id": 2698131582, 
     "vehicle_id": "65809daabdd23af2f4e83e13", 
@@ -62,6 +73,19 @@ db.createCollection("sale_records")
     "reconditioning_cost": 346,
     "profit": 5482
   }
+
+  {
+    "sale_date": "2023-12-18 16:55:00",
+    "sale_price": 28000,
+    "sales_person_id": "658362dcf10f019b41ef39ef", 
+    "vehicle_id": "658220304ae01c3dc5826be3", 
+    "buy_in_price": 22000,
+    "reconditioning_cost": 800,
+    "profit": 5200
+  }
+
+
+  
   
   //buyin
   {
