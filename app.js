@@ -188,11 +188,11 @@ app.get('/inventory', async (req, res) => {
             {
                 $match: filterCriteria
             },
-            // {
-            //     $match: {
-            //         'vehicle_info.status': 'Active'
-            //     }
-            // },
+            {
+                $match: {
+                    'vehicle_info.status': 'Active'
+                }
+            },
             {
                 $project: {
                     VIN: "$vehicle_info.VIN",
