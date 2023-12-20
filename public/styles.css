@@ -161,3 +161,54 @@ button[type="submit"]:hover {
         flex-direction: column; /* Stack items vertically on smaller screens */
     }
 }
+
+
+/* for reports pages */
+.reports_container {
+    display: flex;
+    min-height: calc(100vh - 60px)
+}
+
+.reprots_sidebar{
+    width: 20%;
+    height: calc(100% - 50px); /* Full height minus navbar height */
+    background-color: #666; /* Background color for the sidebar */
+    top: 50px; /* Below the navbar */
+    left: 0;
+    z-index: 500; /* Below the navbar */
+}
+
+.reports_sidebar_contents {
+    flex: 0 0 200px; /* Adjust the width as needed */
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Ensure full height */
+    background-color: #e9e9e9; /* Optional: background color for sidebar */
+}
+
+.reports_sidebar_contents ul {
+    list-style-type: none; 
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column; 
+}
+
+.reports_sidebar_contents ul li {
+    padding: 10px; 
+    display: block; 
+    border-bottom: 1px solid #ccc; 
+}
+
+.reports_content {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    justify-content: center; 
+}
+
+.reports_content form {
+    width: 50%; 
+}
+
+

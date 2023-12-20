@@ -1,0 +1,45 @@
+<%- include("../header") %>
+<body>
+  <div class="reports_container">
+    <div class="reports_sidebar"><%- include("./reports_sidebar") %></div>
+
+    <div class="reports_content">
+      <form action="/buyin_report" method="post">
+        <div>
+          <label for="vin">VIN</label>
+          <input type="text" name="vin" id="vin" />
+        </div>
+        <div>
+          <label for="make">Make</label>
+          <input type="text" name="make" id="make" />
+        </div>
+        <div>
+          <label for="model">Model</label>
+          <input type="text" name="model" id="model" />
+        </div>
+        <div>
+          <label for="year">Year</label>
+          <input type="number" name="year" id="year" />
+        </div>
+        <div>
+          <label for="mileage">Mileage</label>
+          <input type="number" name="mileage" id="mileage" />
+        </div>
+        <div>
+          <label for="fuel_type">Fuel type</label>
+          <input type="text" name="fuel_type" id="fuel_type" />
+        </div>
+        <div>
+          <label for="buyin_date">Buyin Date</label>
+          <input type="datetime-local" name="buyin_date" id="buyin_date" />
+        </div>
+        <div>
+          <label for="buyin_price">Buyin Price</label>
+          <input type="number" name="buyin_price" id="buyin_price" />
+        </div>
+
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  </div>
+</body>

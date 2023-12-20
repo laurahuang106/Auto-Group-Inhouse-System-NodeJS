@@ -327,8 +327,8 @@ app.get('/inventory', async (req, res) => {
     }
 });
 
-app.get('/buyin_report', async (req, res) => {
-    res.render('buyin_report');
+app.get('/reports/buyin_report', async (req, res) => {
+    res.render('./reports/buyin_report');
 });
 
 app.post('/buyin_report', async (req, res) => {
