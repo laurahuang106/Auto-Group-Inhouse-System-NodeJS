@@ -16,7 +16,6 @@
                     <input type="date" name="end_date" id="end_date_dropdown" value="<%= query.end_date || '' %>">
                 </div>
                 
-        
                 <label for="employee_dropdown">Sales Person</label>
                 <select name="employee_dropdown" id="employee_dropdown">
                     <option value="" <% if (!query.employee_dropdown) { %>selected<% } %>></option>
@@ -127,8 +126,6 @@
             });
 
             function validateForm() {
-                console.log('Validating form'); // For debugging purposes
-
                 const startDate = document.getElementById('start_date_dropdown').value;
                 const endDate = document.getElementById('end_date_dropdown').value;
                 const minYear = parseInt(document.getElementById('min_year_dropdown').value);

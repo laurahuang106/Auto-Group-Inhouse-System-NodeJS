@@ -78,8 +78,6 @@ app.get('/orders', async (req, res) => {
 
 app.get('/inventory', async (req, res) => {
     try {
-        let filterCriteria = {};
-
         // fetch filters data 
         const branches = await db.collection('users').distinct('branch');
         const buyin_dates = await db.collection('buyin_records').distinct('buyin_date');
@@ -92,7 +90,6 @@ app.get('/inventory', async (req, res) => {
                 }
             }
         ]).toArray();
-
         /// find the minimum and maximum year of production
         const yearRangeResult = await db.collection('vehicles').aggregate([
             {
@@ -110,7 +107,6 @@ app.get('/inventory', async (req, res) => {
         for (let i = minYear; i <= maxYear; i += year_gap) {
             years.push(i);
         }
-
         // hardcoded max mileage of all cars
         const max_mileage = 100000
         const mileage_gap = 10000; 
@@ -119,7 +115,10 @@ app.get('/inventory', async (req, res) => {
             mileages.push(i);
         }
 
-        // add filterCrititeria based on user's choice
+
+        // add user options to filterCritiria to filter table
+        let filterCriteria = {};
+
         if (req.query.start_date) {
             filterCriteria['buyin_date'] = { $gte: new Date(req.query.start_date) };
         }
@@ -161,6 +160,8 @@ app.get('/inventory', async (req, res) => {
 
         const sortCriteria = { buyin_date: -1, VIN: -1, make: -1, model: -1, year: -1, mileage: -1, buyin_price: -1} 
 
+
+        // fetch data for table
         const records = await db.collection('buyin_records').aggregate([
             {
                 $lookup: {
