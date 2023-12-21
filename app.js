@@ -466,6 +466,62 @@ app.get('/reports/sale_report/success', async (req, res) => {
 });
 
 
+app.get('/reports/reconditioning_report', async (req, res) => {
+    res.render('reports/reconditioning_report', { status: '' });
+});
+
+app.post('/reports/reconditioning_report', async (req, res) => {
+    try {
+        // Function to capitalize input and trim left and right spaces
+        function capitalizeFirstWord(string) {
+            return string.trim().replace(/^\w/, c => c.toUpperCase());
+        }
+
+        // Extract from user input
+        const formData = req.body;
+        const vehicleData = {
+            VIN: capitalizeFirstWord(formData.vin),
+            make: capitalizeFirstWord(formData.make),
+            model: capitalizeFirstWord(formData.model),
+            year_of_production: parseInt(formData.year),
+            mileage: parseInt(formData.mileage),
+            reconditioning_cost: parseFloat(formData.reconditioning_cost)
+        };
+
+        // Query the database to check if the vehicle is still active
+        const vehicle = await db.collection('vehicles').findOne({
+            VIN: vehicleData.VIN,
+            make: vehicleData.make,
+            model: vehicleData.model,
+            year_of_production: vehicleData.year_of_production,
+            mileage: vehicleData.mileage,
+            status: "Active" 
+        });
+
+        if (vehicle) {
+            const vehicle_id = vehicle._id;
+            const reconditioning_cost = vehicleData.reconditioning_cost;
+
+            // Update vehicle status
+            await db.collection('vehicles').updateOne(
+                { _id: vehicle_id },
+                { $set: { reconditioning_cost: reconditioning_cost } }
+            );
+
+            res.redirect('/reports/reconditioning_report/success?status=success');
+        } else {
+            res.status(404).send("Vehicle not found or already sold");
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+app.get('/reports/reconditioning_report/success', async (req, res) => {
+    const status = req.query.status;
+    res.render('./reports/reconditioning_report', { status: status });
+});
+
 app.get('/profile', async (req, res) => {
     res.render('profile');
 });
