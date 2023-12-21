@@ -421,8 +421,6 @@ app.post('/reports/sale_report', async (req, res) => {
             status: "Active" 
         });
 
-        
-
         // if haven't sold yet
         if (sold_vehicle) {
             const sold_vehicle_id = sold_vehicle._id;
