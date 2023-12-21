@@ -1,63 +1,40 @@
 <%- include("./header.ejs") %>
 <body>
-    <!-- user personal info -->
     <div class="profile-container">
-        <h1>User Profile</h1>
-        <form action="/update-profile" method="post">
+        <h1>My Profile</h1>
+        <form action="/profile" method="post">
             <div class="profile-field">
                 <label>First Name:</label>
-                <span>placeholder</span>
+                <span><%= f_name %></span>
             </div>
 
             <div class="profile-field">
                 <label>Last Name:</label>
-                <span>placeholder</span>
+                <span><%= l_name %></span>
             </div>
 
             <div class="profile-field">
                 <label>Branch:</label>
-                <span>placeholder</span>
+                <span><%= branch %></span>
             </div>
 
             <div class="profile-field">
                 <label>Type:</label>
-                <span>placeholder</span>
+                <span><%= employee_type %></span>
             </div>
 
             <div class="profile-field">
                 <label for="email">Email:</label>
-                <input type="email" name="email" id="email" value="placeholder email" />
+                <input type="email" name="email" id="email" value="<%= email %>" />
             </div>
 
             <div class="profile-field">
                 <label for="phone">Phone:</label>
-                <input type="text" name="phone" id="phone" value="placeholder phone" />
+                <input type="text" name="phone" id="phone" value="<%= phone %>" />
             </div>
 
             <button type="submit">Update Profile</button>
         </form>
-    </div>
-    
-    <!-- user sales records -->
-    <div class="report-section">
-        <h2>My Selling Records</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>placeholder header1</th>
-                    <th>placeholder header2</th>
-                    <!-- ... more headers ... -->
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>placeholder data1</td>
-                    <td>placeholder data2</td>
-                    <!-- ... more data rows ... -->
-                </tr>
-                <!-- ... additional data rows ... -->
-            </tbody>
-        </table>
     </div>
 </body>
 </html>

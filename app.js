@@ -523,5 +523,40 @@ app.get('/reports/reconditioning_report/success', async (req, res) => {
 });
 
 app.get('/profile', async (req, res) => {
-    res.render('profile');
+    // placeholder, hardcoded user and branch 
+    const user_id = "65822220bdd23af2f423260f"
+
+    // fetch user account information
+    const user_info = await db.collection('users').findOne({
+        _id: new ObjectId(user_id)
+    });
+    const f_name = user_info.f_name;
+    const l_name = user_info.l_name;
+    const email = user_info.email;
+    const phone = user_info.phone;
+    const branch = user_info.branch;
+    const employee_type = user_info.employee_type;
+
+    res.render('profile', {f_name, l_name, email, phone, branch, employee_type});
+});
+
+app.post('/profile', async (req, res) => {
+    // placeholder, hardcoded user and branch 
+    const user_id = "65822220bdd23af2f423260f"
+
+    const userData = req.body
+    const new_email = userData.email
+    const new_phone = userData.phone
+
+    // Update user info
+    try {
+        await db.collection('users').updateOne(
+            { _id: new ObjectId(user_id) },
+            { $set: { email: new_email, phone: new_phone } }
+        );
+        res.redirect('/profile');
+    } catch (error) {
+        console.error("Error updating user profile:", error);
+        res.status(500).send("Error updating profile");
+    }
 });
