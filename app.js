@@ -330,7 +330,7 @@ app.get('/inventory', async (req, res) => {
 
 // reports pages
 app.get('/reports/buyin_report', async (req, res) => {
-    res.render('./reports/buyin_report');
+    res.render('./reports/buyin_report', { status: '' });
 });
 
 app.post('/reports/buyin_report', async (req, res) => {
@@ -379,14 +379,19 @@ app.post('/reports/buyin_report', async (req, res) => {
         // Insert buyin record into the 'buyin_records' collection
         await db.collection('buyin_records').insertOne(buyinRecordData);
 
-        res.redirect('/inventory'); 
+        res.redirect('/reports/buyin_report/success?status=success')
     } catch (error) {
         res.status(500).send(error.message);
     }
 });
 
+app.get('/reports/buyin_report/success', async (req, res) => {
+    const status = req.query.status;
+    res.render('./reports/buyin_report', { status: status });
+});
+
 app.get('/reports/sale_report', async (req, res) => {
-    res.render('./reports/sale_report');
+    res.render('reports/sale_report', { status: '' });
 });
 
 app.post('/reports/sale_report', async (req, res) => {
@@ -446,13 +451,18 @@ app.post('/reports/sale_report', async (req, res) => {
             };
             await db.collection('sale_orders').insertOne(new_order_data); 
 
-            res.redirect('/orders');
+            res.redirect('/reports/sale_report/success?status=success');
         } else {
             res.status(404).send("Vehicle not found or already sold");
         }
     } catch (error) {
         res.status(500).send(error.message);
     }
+});
+
+app.get('/reports/sale_report/success', async (req, res) => {
+    const status = req.query.status;
+    res.render('./reports/sale_report', { status: status });
 });
 
 

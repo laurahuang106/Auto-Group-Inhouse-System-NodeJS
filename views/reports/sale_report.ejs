@@ -6,6 +6,12 @@
     <div class="reports_content">
       <form action="./sale_report" method="post">
         <div>
+          <% if (status === 'success') { %>
+          <h4>Sale report submitted successfully!</h4>
+          <% } %>
+        </div>
+
+        <div>
           <label for="vin">VIN</label>
           <input type="text" name="vin" id="vin" />
         </div>
