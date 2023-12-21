@@ -327,11 +327,13 @@ app.get('/inventory', async (req, res) => {
     }
 });
 
+
+// reports pages
 app.get('/reports/buyin_report', async (req, res) => {
     res.render('./reports/buyin_report');
 });
 
-app.post('/buyin_report', async (req, res) => {
+app.post('/reports/buyin_report', async (req, res) => {
     try {
         // set default reconditioning cost
         const reconditioning_cost = 0
@@ -382,6 +384,79 @@ app.post('/buyin_report', async (req, res) => {
         res.status(500).send(error.message);
     }
 });
+
+app.get('/reports/sale_report', async (req, res) => {
+    res.render('./reports/sale_report');
+});
+
+app.post('/reports/sale_report', async (req, res) => {
+    try {
+        // Placeholder, hardcoded user and branch 
+        const user_id = new ObjectId("65822220bdd23af2f423260f");
+
+        // Function to capitalize input and trim left and right spaces
+        function capitalizeFirstWord(string) {
+            return string.trim().replace(/^\w/, c => c.toUpperCase());
+        }
+
+        // Extract from user input
+        const formData = req.body;
+        const vehicleData = {
+            VIN: capitalizeFirstWord(formData.vin),
+            make: capitalizeFirstWord(formData.make),
+            model: capitalizeFirstWord(formData.model),
+            year_of_production: parseInt(formData.year),
+            mileage: parseInt(formData.mileage),
+            sale_date: new Date(formData.sale_date),
+            sale_price: parseFloat(formData.sale_price)
+        };
+
+        // Query the database to check if the vehicle has been sold
+        const sold_vehicle = await db.collection('vehicles').findOne({
+            VIN: vehicleData.VIN,
+            make: vehicleData.make,
+            model: vehicleData.model,
+            year_of_production: vehicleData.year_of_production,
+            mileage: vehicleData.mileage,
+            status: "Active" 
+        });
+
+        
+
+        // if haven't sold yet
+        if (sold_vehicle) {
+            const sold_vehicle_id = sold_vehicle._id;
+            const sold_vehicle_buyin_price = sold_vehicle.buyin_price;
+            const sold_vehicle_reconditioning_cost = sold_vehicle.reconditioning_cost;
+            const sold_vehicle_profit = vehicleData.sale_price - sold_vehicle_buyin_price - sold_vehicle_reconditioning_cost;
+
+            // Update vehicle status
+            await db.collection('vehicles').updateOne(
+                { _id: sold_vehicle_id },
+                { $set: { status: 'Sold' } }
+            );
+
+            // Insert new order data
+            const new_order_data = {
+                sale_price: vehicleData.sale_price,
+                sales_person_id: user_id,
+                vehicle_id: sold_vehicle_id,
+                buyin_price: sold_vehicle_buyin_price,
+                reconditioning_cost: sold_vehicle_reconditioning_cost,
+                profit: sold_vehicle_profit,
+                sale_date: vehicleData.sale_date,
+            };
+            await db.collection('sale_orders').insertOne(new_order_data); 
+
+            res.redirect('/orders');
+        } else {
+            res.status(404).send("Vehicle not found or already sold");
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
 
 app.get('/profile', async (req, res) => {
     res.render('profile');
