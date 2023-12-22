@@ -6,16 +6,16 @@
     <div class="report-section">
       <h1>Weekly Sales Report</h1>
       <div>
-        <h3>Total Sale Amount</h3>
-        <h4>$ sale amount placeholder</h4>
+        <h3>Total Order Number</h3>
+        <h4><%= weekly_sale.total_orders %></h4>
       </div>
       <div>
-        <h3>Total Order Number</h3>
-        <h4>order number placeholder</h4>
+        <h3>Total Sale Amount</h3>
+        <h4>$ <%= weekly_sale.total_amount %></h4>
       </div>
       <div>
         <h3>Total Profit</h3>
-        <h4>profit placeholder</h4>
+        <h4>$ <%= weekly_sale.total_profit %></h4>
       </div>
     </div>
 
@@ -23,17 +23,16 @@
     <div class="report-section">
       <h1>Monthly Sales Report</h1>
       <div>
-        <h3>Total Sale Amount</h3>
-        <h4>$ sale amount placeholder</h4>
+        <h3>Total Order Number</h3>
+        <h4><%= monthly_sale.total_orders %></h4>
       </div>
       <div>
-        <h3>Total Order Number</h3>
-        <h4>order number placeholder</h4>
+        <h3>Total Sale Amount</h3>
+        <h4>$ <%= monthly_sale.total_amount %></h4>
       </div>
       <div>
         <h3>Total Profit</h3>
-        <h4>profit placeholder</h4>
+        <h4>$ <%= monthly_sale.total_profit %></h4>
       </div>
-    </div>
   </div>
 </body>

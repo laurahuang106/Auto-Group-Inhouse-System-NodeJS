@@ -24,8 +24,88 @@ MongoClient.connect(url)
         console.error("Failed to connect to MongoDB", err);
     });
 
+    
 app.get('/', async (req, res) => {
-    res.render('index');
+    try {
+        // placeholder, hardcoded user and branch 
+        const user_id = "65822220bdd23af2f423260f"
+        const branch = "Champaign, IL"
+
+        const one_week_ago = new Date('2023-12-17');
+        // note: for display purpose, hardcoded dates of weekly and monthly report
+        // please uncomment the codes below to get real-time weekly and monthly report
+        // const one_week_ago = new Date();
+        // one_week_ago.setDate(one_week_ago.getDate() - 7);
+
+        const weekly_sale_stats = await db.collection('sale_orders').aggregate([
+            {
+                $lookup: {
+                    from: "vehicles",
+                    localField: "vehicle_id",
+                    foreignField: "_id",
+                    as: "vehicle_info"
+                }
+            },
+            {
+                $unwind: "$vehicle_info"
+            },
+            { 
+                $match: { 
+                    sale_date: { $gte: one_week_ago }, 
+                    // placeholder, need change branch
+                    // "vehicle_info.branch_location": "Champaign, IL"
+                } 
+            },
+            { $group: {
+                _id: null,
+                total_orders: { $sum: 1 },
+                total_amount: { $sum: "$sale_price" },
+                total_profit: { $sum: "$profit" }
+            }},
+        ]).toArray();
+        
+        const weekly_sale = weekly_sale_stats[0] || { total_orders: 0, total_amount: 0, total_profit: 0 };
+
+
+        const one_month_ago = new Date('2023-11-17');
+        // note: for display purpose, hardcoded dates of weekly and monthly report
+        // please uncomment the codes below to get real-time weekly and monthly report
+        // const one_week_ago = new Date();
+        // one_week_ago.setDate(one_week_ago.getDate() - 7);
+
+        const monthly_sale_stats = await db.collection('sale_orders').aggregate([
+            {
+                $lookup: {
+                    from: "vehicles",
+                    localField: "vehicle_id",
+                    foreignField: "_id",
+                    as: "vehicle_info"
+                }
+            },
+            {
+                $unwind: "$vehicle_info"
+            },
+            { 
+                $match: { 
+                    sale_date: { $gte: one_month_ago }, 
+                    // placeholder, need change branch
+                    // "vehicle_info.branch_location": "Champaign, IL"
+                } 
+            },
+            { $group: {
+                _id: null,
+                total_orders: { $sum: 1 },
+                total_amount: { $sum: "$sale_price" },
+                total_profit: { $sum: "$profit" }
+            }},
+        ]).toArray();
+        
+        const monthly_sale = monthly_sale_stats[0] || { total_orders: 0, total_amount: 0, total_profit: 0 };
+
+        res.render('home', { weekly_sale, monthly_sale });
+    } catch (error) {
+        res.status(500).send('Error fetching sales data');
+    }
 });
 
 app.get('/orders', async (req, res) => {

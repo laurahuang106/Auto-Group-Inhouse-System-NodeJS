@@ -40,6 +40,10 @@ li a:hover {
     background-color: #911c1b;
 }
 
+.report-container{
+    display: flex
+}
+
 /* Container for search and filters */
 .search-filter-container {
     width: 20%;
