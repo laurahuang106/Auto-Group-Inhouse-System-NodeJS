@@ -1,4 +1,5 @@
-require('dotenv').config()
+require('dotenv').config();
+
 const express = require('express');
 const { MongoClient, ObjectId } = require('mongodb');
 
@@ -13,7 +14,6 @@ const url = `mongodb+srv://laurah:${process.env.DB_PASSWORD}@cluster0.vomr88x.mo
 const dbName = 'autoGroup';
 let db;
 
-
 // Connect to MongoDB
 MongoClient.connect(url)
     .then(client => {
@@ -24,6 +24,67 @@ MongoClient.connect(url)
         console.error("Failed to connect to MongoDB", err);
     });
 
+
+// Connect to Firebase
+const admin = require('firebase-admin');
+const serviceAccount = require('./firebase-adminsdk.json'); 
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
+
+
+app.get('/register', async (req, res) => {
+    const branches = await db.collection('users').distinct('branch');
+    const employee_types = ['Admin', 'Normal User']
+    res.render('register', { status: '', branches, employee_types })
+})
+
+app.post('/register', async (req, res) => {
+    const { email, password, f_name, l_name, phone, branch_dropdown, emp_type_dropdown, gender_dropdown, date_of_birth } = req.body;
+  
+    try {
+        // Create user in Firebase Authentication
+        const userRecord = await admin.auth().createUser({
+            email: email,
+            password: password,
+        });
+
+        // capitalize input and trim left and right spaces
+        function capitalizeFirstWord(string) {
+            return string.trim().replace(/^\w/, c => c.toUpperCase());
+        }
+
+        // Store additional user details in MongoDB
+        await db.collection('users').insertOne({
+            _id: userRecord.uid, // Use the Firebase UID as the MongoDB document ID
+            email: email,
+            f_name: capitalizeFirstWord(f_name),
+            l_name: capitalizeFirstWord(l_name),
+            phone: phone,
+            branch: branch_dropdown,
+            employee_type: emp_type_dropdown,
+            gender: gender_dropdown,
+            date_of_birth: new Date(date_of_birth),
+        });
+        res.redirect('/register/success?status=success');
+    } catch (error) {
+        console.error("Error in user registration:", error);
+        if (error.code === 'auth/email-already-exists') {
+            res.status(400).send("Email already exists");
+        } else {
+            res.status(500).send("Error registering user");
+        }
+    }
+});
+
+app.get('/register/success', async (req, res) => {
+    const status = req.query.status;
+    const branches = await db.collection('users').distinct('branch');
+    const employee_types = ['Admin', 'Normal user'];
+    res.render('register', { status: status, branches, employee_types });
+});
+  
     
 app.get('/', async (req, res) => {
     try {
