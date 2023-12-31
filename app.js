@@ -1,7 +1,16 @@
 require('dotenv').config();
 
 const express = require('express');
-const { MongoClient, ObjectId } = require('mongodb');
+const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
+
+// Connect to Firebase
+const admin = require('firebase-admin');
+const serviceAccount = require('./firebase-adminsdk.json'); 
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
 
 const app = express();
 const port = 3000;
@@ -9,12 +18,37 @@ const port = 3000;
 app.set('view engine', 'ejs');
 app.use(express.static("public"));
 app.use(express.urlencoded({extended: true}))
+app.use(express.json()); 
+app.use(cookieParser());
 
+// Middleware 
+app.use((req, res, next) => {
+    // set global variables for all views
+    res.locals.firebaseApiKey = process.env.FIREBASE_API_KEY;
+
+    // verify JWT token in cookie
+    if (req.cookies.session) {
+        jwt.verify(req.cookies.session, process.env.JWT_SECRET_KEY, (err, decoded) => {
+            if (err) {
+                res.locals.loggedIn = false;
+            } else {
+                res.locals.loggedIn = true;
+                res.locals.email = decoded.email; // Assuming email is stored in JWT
+            }
+            next();
+        });
+    } else {
+        res.locals.loggedIn = false;
+        next();
+    }
+});
+
+// Connect to MongoDB
+const { MongoClient, ObjectId } = require('mongodb');
 const url = `mongodb+srv://laurah:${process.env.DB_PASSWORD}@cluster0.vomr88x.mongodb.net/?retryWrites=true&w=majority`;
 const dbName = 'autoGroup';
 let db;
 
-// Connect to MongoDB
 MongoClient.connect(url)
     .then(client => {
         db = client.db(dbName);
@@ -25,12 +59,23 @@ MongoClient.connect(url)
     });
 
 
-// Connect to Firebase
-const admin = require('firebase-admin');
-const serviceAccount = require('./firebase-adminsdk.json'); 
+// Endpoint to verify Firebase token and create a JWT session token
+app.post('/verifyToken', async (req, res) => {
+    const { token } = req.body;
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
+    try {
+        const decodedToken = await admin.auth().verifyIdToken(token);
+        const userId = decodedToken.uid;
+        const userEmail = decodedToken.email;
+
+        // Create a JWT for session management
+        const sessionToken = jwt.sign({ userId: userId, email: userEmail }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
+        res.cookie('session', sessionToken, { httpOnly: true, secure: true }); 
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Error verifying Firebase token:', error);
+        res.json({ success: false, error: 'Invalid token' });
+    }
 });
 
 
@@ -83,6 +128,34 @@ app.get('/register/success', async (req, res) => {
     const branches = await db.collection('users').distinct('branch');
     const employee_types = ['Admin', 'Normal user'];
     res.render('register', { status: status, branches, employee_types });
+});
+
+
+app.get('/login', (req, res) => {
+    res.render('login', { error: '' });
+});
+
+app.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        // Authenticate using Firebase
+        const userRecord = await admin.auth().getUserByEmail(email);
+
+         // Create a JWT for session management
+        const sessionToken = jwt.sign({ uid: userRecord.uid, email: userRecord.email }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
+
+         // Set the JWT as an HTTP-only cookie
+         // When testing locally, you might want to set secure to false
+        res.cookie('session', sessionToken, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
+        // Adjust cookie options as needed
+ 
+
+        // Redirect to a user profile page or dashboard after successful login
+        res.redirect('/');
+    } catch (error) {
+        res.render('login', { error: 'Invalid login credentials' });
+    }
 });
   
     

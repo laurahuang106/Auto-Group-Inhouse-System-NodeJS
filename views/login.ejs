@@ -1,0 +1,18 @@
+<%- include("./header") %>
+<body>
+  <div>
+    <form action="/login" method="post" id="login_form">
+      <div>
+        <label for="email">Email</label>
+        <input type="text" name="email" id="email" required />
+      </div>
+      <div>
+        <label for="password">Password</label>
+        <input type="text" name="password" id="password" required />
+      </div>
+
+      <button type="submit">Sign in</button>
+    </form>
+  </div>
+  <script src="/login.js"></script>
+</body>

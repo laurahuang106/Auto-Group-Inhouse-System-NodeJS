@@ -6,9 +6,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/styles.css" />
     <title>CAC Sales System</title>
+
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+
+    <script>
+      const firebaseConfig = {
+        apiKey: "<%= firebaseApiKey %>",
+        authDomain: "auto-group-in-house-software.firebaseapp.com",
+        projectId: "auto-group-in-house-software",
+        storageBucket: "auto-group-in-house-software.appspot.com",
+        messagingSenderId: "470961451926",
+        appId: "1:470961451926:web:f5a2f70c92c5d9842d63b7",
+      };
+
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+    </script>
   </head>
   <body>
     <h1>CAC Sales System</h1>
+    <!-- placeholder, need change to user full name -->
+    <% if (loggedIn) { %>
+    <p>Welcome <%= email %></p>
+    <% } %>
 
     <!-- Navigation Bar -->
     <ul>
