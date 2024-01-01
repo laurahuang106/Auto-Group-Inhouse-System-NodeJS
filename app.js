@@ -23,17 +23,17 @@ app.use(cookieParser());
 
 // Middleware 
 app.use((req, res, next) => {
-    // set global variables for all views
+    // Set global variables for all views
     res.locals.firebaseApiKey = process.env.FIREBASE_API_KEY;
 
-    // verify JWT token in cookie
+    // Verify JWT token in cookie
     if (req.cookies.session) {
         jwt.verify(req.cookies.session, process.env.JWT_SECRET_KEY, (err, decoded) => {
             if (err) {
                 res.locals.loggedIn = false;
             } else {
                 res.locals.loggedIn = true;
-                res.locals.email = decoded.email; // Assuming email is stored in JWT
+                res.locals.email = decoded.email; 
             }
             next();
         });
@@ -59,26 +59,6 @@ MongoClient.connect(url)
     });
 
 
-// Endpoint to verify Firebase token and create a JWT session token
-app.post('/verifyToken', async (req, res) => {
-    const { token } = req.body;
-
-    try {
-        const decodedToken = await admin.auth().verifyIdToken(token);
-        const userId = decodedToken.uid;
-        const userEmail = decodedToken.email;
-
-        // Create a JWT for session management
-        const sessionToken = jwt.sign({ userId: userId, email: userEmail }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
-        res.cookie('session', sessionToken, { httpOnly: true, secure: true }); 
-        res.json({ success: true });
-    } catch (error) {
-        console.error('Error verifying Firebase token:', error);
-        res.json({ success: false, error: 'Invalid token' });
-    }
-});
-
-
 app.get('/register', async (req, res) => {
     const branches = await db.collection('users').distinct('branch');
     const employee_types = ['Admin', 'Normal User']
@@ -95,7 +75,7 @@ app.post('/register', async (req, res) => {
             password: password,
         });
 
-        // capitalize input and trim left and right spaces
+        // Capitalize input and trim left and right spaces
         function capitalizeFirstWord(string) {
             return string.trim().replace(/^\w/, c => c.toUpperCase());
         }
@@ -135,29 +115,25 @@ app.get('/login', (req, res) => {
     res.render('login', { error: '' });
 });
 
-app.post('/login', async (req, res) => {
-    const { email, password } = req.body;
+// Endpoint to verify Firebase token and create a JWT session token when login
+app.post('/verifyToken', async (req, res) => {
+    const { token } = req.body;
 
     try {
-        // Authenticate using Firebase
-        const userRecord = await admin.auth().getUserByEmail(email);
+        const decodedToken = await admin.auth().verifyIdToken(token);
+        const userId = decodedToken.uid;
+        const userEmail = decodedToken.email;
 
-         // Create a JWT for session management
-        const sessionToken = jwt.sign({ uid: userRecord.uid, email: userRecord.email }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
-
-         // Set the JWT as an HTTP-only cookie
-         // When testing locally, you might want to set secure to false
-        res.cookie('session', sessionToken, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
-        // Adjust cookie options as needed
- 
-
-        // Redirect to a user profile page or dashboard after successful login
-        res.redirect('/');
+        // Create a JWT for session management
+        const sessionToken = jwt.sign({ userId: userId, email: userEmail }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
+        res.cookie('session', sessionToken, { httpOnly: true, secure: true }); 
+        res.json({ success: true });
     } catch (error) {
-        res.render('login', { error: 'Invalid login credentials' });
+        console.error('Error verifying Firebase token:', error);
+        res.json({ success: false, error: 'Invalid token' });
     }
 });
-  
+
     
 app.get('/', async (req, res) => {
     try {

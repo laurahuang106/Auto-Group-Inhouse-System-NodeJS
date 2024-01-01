@@ -1,4 +1,3 @@
-// login.js
 document.getElementById('login_form').addEventListener('submit', async (event) => {
     event.preventDefault();
   
@@ -12,7 +11,7 @@ document.getElementById('login_form').addEventListener('submit', async (event) =
         fetch('/verifyToken', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ token: idToken }), // Ensure the token is sent correctly
+            body: JSON.stringify({ token: idToken }), 
         })
         .then(response => response.json())
         .then(data => {
