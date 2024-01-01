@@ -30,30 +30,42 @@ function isAuthenticated(req, res, next) {
 }
 
 // Global middleware for setting variables and checking authentication
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
     // Set global variables for all views
     res.locals.firebaseApiKey = process.env.FIREBASE_API_KEY;
 
     // Verify JWT token in cookie
     if (req.cookies.session) {
-        jwt.verify(req.cookies.session, process.env.JWT_SECRET_KEY, (err, decoded) => {
+        jwt.verify(req.cookies.session, process.env.JWT_SECRET_KEY, async (err, decoded) => {
             if (err) {
                 res.locals.loggedIn = false;
+                next();
             } else {
                 res.locals.loggedIn = true;
-                res.locals.email = decoded.email; 
-                res.locals.userId = decoded.userId; 
+                res.locals.email = decoded.email;
+                res.locals.userId = decoded.userId;
+
+                try {
+                    // Fetch user details from MongoDB
+                    const user = await db.collection('users').findOne({ _id: res.locals.userId });
+                    if (user) {
+                        res.locals.full_name = user.f_name + ' ' + user.l_name;
+                    }
+                } catch (dbError) {
+                    console.error("Error fetching user from MongoDB:", dbError);
+                }
+                next();
             }
-            next()
         });
     } else {
         res.locals.loggedIn = false;
-        next()
+        next();
     }
 });
 
+
 // Connect to MongoDB
-const { MongoClient, ObjectId } = require('mongodb');
+const { MongoClient } = require('mongodb');
 const url = `mongodb+srv://laurah:${process.env.DB_PASSWORD}@cluster0.vomr88x.mongodb.net/?retryWrites=true&w=majority`;
 const dbName = 'autoGroup';
 let db;
