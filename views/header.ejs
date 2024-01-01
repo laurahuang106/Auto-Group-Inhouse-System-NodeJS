@@ -26,31 +26,22 @@
   </head>
   <body>
     <h1>CAC Sales System</h1>
-    <!-- placeholder, need change to user full name -->
-    <% if (loggedIn) { %>
-    <p>Welcome <%= email %></p>
-    <% } %>
-
-    <!-- Navigation Bar -->
+    <% if (!loggedIn) { %>
     <ul>
-      <li>
-        <a href="/">Home</a>
-      </li>
-      <li>
-        <a href="/orders">Sale Orders</a>
-      </li>
-      <li>
-        <a href="/inventory">Inventory</a>
-      </li>
-      <li>
-        <a href="/reports/buyin_report">Vehicle Buyin Report</a>
-      </li>
-      <li>
-        <a href="/profile">Profile</a>
-      </li>
-      <li>
-        <a href="/logout">Logout</a>
-      </li>
+      <li><a href="/login">Login</a></li>
+      <li><a href="/register">Register</a></li>
     </ul>
+    <% } else { %>
+    <!-- placeholder, need change to user full name -->
+    <p>Welcome <%= email %></p>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/orders">Sale Orders</a></li>
+      <li><a href="/inventory">Inventory</a></li>
+      <li><a href="/reports/buyin_report">Report</a></li>
+      <li><a href="/profile">Profile</a></li>
+      <li><a href="/logout">Logout</a></li>
+    </ul>
+    <% } %>
   </body>
 </html>

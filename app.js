@@ -21,7 +21,15 @@ app.use(express.urlencoded({extended: true}))
 app.use(express.json()); 
 app.use(cookieParser());
 
-// Middleware 
+// Middleware to check if the user is logged in
+function isAuthenticated(req, res, next) {
+    if (!req.cookies.session) {
+        return res.redirect('/login');
+    }
+    next(); 
+}
+
+// Global middleware for setting variables and checking authentication
 app.use((req, res, next) => {
     // Set global variables for all views
     res.locals.firebaseApiKey = process.env.FIREBASE_API_KEY;
@@ -35,12 +43,17 @@ app.use((req, res, next) => {
                 res.locals.loggedIn = true;
                 res.locals.email = decoded.email; 
             }
-            next();
         });
     } else {
         res.locals.loggedIn = false;
-        next();
     }
+
+    const openRoutes = ['/login', '/register'];
+    if (!openRoutes.includes(req.path)) {
+        return isAuthenticated(req, res, next);
+    }
+
+    next();
 });
 
 // Connect to MongoDB
@@ -140,7 +153,7 @@ app.get('/logout', (req, res) => {
 });
 
     
-app.get('/', async (req, res) => {
+app.get('/', isAuthenticated,async (req, res) => {
     try {
         // placeholder, hardcoded user and branch 
         const user_id = "65822220bdd23af2f423260f"
@@ -223,7 +236,7 @@ app.get('/', async (req, res) => {
     }
 });
 
-app.get('/orders', async (req, res) => {
+app.get('/orders', isAuthenticated, async (req, res) => {
     try {
         // fetch filters data 
         const branches = await db.collection('users').distinct('branch');
@@ -371,7 +384,7 @@ app.get('/orders', async (req, res) => {
 });
 
 
-app.get('/inventory', async (req, res) => {
+app.get('/inventory', isAuthenticated, async (req, res) => {
     try {
         // fetch filters data 
         const branches = await db.collection('users').distinct('branch');
@@ -524,11 +537,11 @@ app.get('/inventory', async (req, res) => {
 
 
 // reports pages
-app.get('/reports/buyin_report', async (req, res) => {
+app.get('/reports/buyin_report', isAuthenticated, async (req, res) => {
     res.render('./reports/buyin_report', { status: '' });
 });
 
-app.post('/reports/buyin_report', async (req, res) => {
+app.post('/reports/buyin_report', isAuthenticated, async (req, res) => {
     try {
         // set default reconditioning cost
         const reconditioning_cost = 0
@@ -580,16 +593,16 @@ app.post('/reports/buyin_report', async (req, res) => {
     }
 });
 
-app.get('/reports/buyin_report/success', async (req, res) => {
+app.get('/reports/buyin_report/success', isAuthenticated, async (req, res) => {
     const status = req.query.status;
     res.render('./reports/buyin_report', { status: status });
 });
 
-app.get('/reports/sale_report', async (req, res) => {
+app.get('/reports/sale_report', isAuthenticated, async (req, res) => {
     res.render('reports/sale_report', { status: '' });
 });
 
-app.post('/reports/sale_report', async (req, res) => {
+app.post('/reports/sale_report', isAuthenticated, async (req, res) => {
     try {
         // Placeholder, hardcoded user and branch 
         const user_id = new ObjectId("65822220bdd23af2f423260f");
@@ -655,17 +668,17 @@ app.post('/reports/sale_report', async (req, res) => {
     }
 });
 
-app.get('/reports/sale_report/success', async (req, res) => {
+app.get('/reports/sale_report/success', isAuthenticated, async (req, res) => {
     const status = req.query.status;
     res.render('./reports/sale_report', { status: status });
 });
 
 
-app.get('/reports/reconditioning_report', async (req, res) => {
+app.get('/reports/reconditioning_report', isAuthenticated, async (req, res) => {
     res.render('reports/reconditioning_report', { status: '' });
 });
 
-app.post('/reports/reconditioning_report', async (req, res) => {
+app.post('/reports/reconditioning_report', isAuthenticated, async (req, res) => {
     try {
         // Function to capitalize input and trim left and right spaces
         function capitalizeFirstWord(string) {
@@ -712,12 +725,12 @@ app.post('/reports/reconditioning_report', async (req, res) => {
     }
 });
 
-app.get('/reports/reconditioning_report/success', async (req, res) => {
+app.get('/reports/reconditioning_report/success', isAuthenticated, async (req, res) => {
     const status = req.query.status;
     res.render('./reports/reconditioning_report', { status: status });
 });
 
-app.get('/profile', async (req, res) => {
+app.get('/profile', isAuthenticated, async (req, res) => {
     // placeholder, hardcoded user and branch 
     const user_id = "65822220bdd23af2f423260f"
 
@@ -735,7 +748,7 @@ app.get('/profile', async (req, res) => {
     res.render('profile', {f_name, l_name, email, phone, branch, employee_type});
 });
 
-app.post('/profile', async (req, res) => {
+app.post('/profile', isAuthenticated, async (req, res) => {
     // placeholder, hardcoded user and branch 
     const user_id = "65822220bdd23af2f423260f"
 
