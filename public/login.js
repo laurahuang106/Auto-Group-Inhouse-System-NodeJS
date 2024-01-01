@@ -22,6 +22,7 @@ document.getElementById('login_form').addEventListener('submit', async (event) =
             }
         });
     } catch (error) {
-        console.error('Authentication error:', error);
+        console.error('Authentication error:', error); 
+        document.getElementById('error-message').textContent = 'Please check email account or password.';
     }
 });
