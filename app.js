@@ -43,17 +43,12 @@ app.use((req, res, next) => {
                 res.locals.loggedIn = true;
                 res.locals.email = decoded.email; 
             }
+            next()
         });
     } else {
         res.locals.loggedIn = false;
+        next()
     }
-
-    const openRoutes = ['/login', '/register'];
-    if (!openRoutes.includes(req.path)) {
-        return isAuthenticated(req, res, next);
-    }
-
-    next();
 });
 
 // Connect to MongoDB
