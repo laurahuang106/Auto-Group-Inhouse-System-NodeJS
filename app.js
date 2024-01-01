@@ -42,6 +42,7 @@ app.use((req, res, next) => {
             } else {
                 res.locals.loggedIn = true;
                 res.locals.email = decoded.email; 
+                res.locals.userId = decoded.userId; 
             }
             next()
         });
@@ -540,11 +541,13 @@ app.post('/reports/buyin_report', isAuthenticated, async (req, res) => {
     try {
         // set default reconditioning cost
         const reconditioning_cost = 0
-
-        // placeholder, hardcoded user and branch 
-        const user_id = "65822220bdd23af2f423260f"
-        const branch_location = "Champaign, IL"
         const status = 'Active'
+
+        const user_id = res.locals.userId
+        const user_info = await db.collection('users').findOne({
+            _id: user_id
+        });
+        const branch_location = user_info.branch
 
         // capitalize input and trim left and right spaces
         function capitalizeFirstWord(string) {
@@ -560,7 +563,7 @@ app.post('/reports/buyin_report', isAuthenticated, async (req, res) => {
             year_of_production: parseInt(formData.year),
             mileage: parseInt(formData.mileage),
             fuel_type: capitalizeFirstWord(formData.fuel_type),
-            branch_location: capitalizeFirstWord(branch_location),
+            branch_location: branch_location,
             buyin_date: new Date(formData.buyin_date),
             buyin_price: parseFloat(formData.buyin_price),
             reconditioning_cost: parseFloat(reconditioning_cost),
@@ -575,8 +578,8 @@ app.post('/reports/buyin_report', isAuthenticated, async (req, res) => {
         const buyinRecordData = {
             buyin_date: new Date(formData.buyin_date),
             vehicle_id: vehicleId,
-            sales_person_id: new ObjectId(user_id), 
-            buyin_price: parseFloat(formData.buyin_price)
+            sales_person_id: user_id,
+            buyin_price: parseFloat(formData.buyin_price),
         };
 
         // Insert buyin record into the 'buyin_records' collection
@@ -599,8 +602,7 @@ app.get('/reports/sale_report', isAuthenticated, async (req, res) => {
 
 app.post('/reports/sale_report', isAuthenticated, async (req, res) => {
     try {
-        // Placeholder, hardcoded user and branch 
-        const user_id = new ObjectId("65822220bdd23af2f423260f");
+        const user_id = res.locals.userId
 
         // Function to capitalize input and trim left and right spaces
         function capitalizeFirstWord(string) {
@@ -726,12 +728,11 @@ app.get('/reports/reconditioning_report/success', isAuthenticated, async (req, r
 });
 
 app.get('/profile', isAuthenticated, async (req, res) => {
-    // placeholder, hardcoded user and branch 
-    const user_id = "65822220bdd23af2f423260f"
+    const user_id = res.locals.userId
 
     // fetch user account information
     const user_info = await db.collection('users').findOne({
-        _id: new ObjectId(user_id)
+        _id: user_id
     });
     const f_name = user_info.f_name;
     const l_name = user_info.l_name;
@@ -744,8 +745,7 @@ app.get('/profile', isAuthenticated, async (req, res) => {
 });
 
 app.post('/profile', isAuthenticated, async (req, res) => {
-    // placeholder, hardcoded user and branch 
-    const user_id = "65822220bdd23af2f423260f"
+    const user_id = res.locals.userId
 
     const userData = req.body
     const new_email = userData.email
@@ -754,7 +754,7 @@ app.post('/profile', isAuthenticated, async (req, res) => {
     // Update user info
     try {
         await db.collection('users').updateOne(
-            { _id: new ObjectId(user_id) },
+            { _id: user_id },
             { $set: { email: new_email, phone: new_phone } }
         );
         res.redirect('/profile');
