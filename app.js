@@ -134,6 +134,11 @@ app.post('/verifyToken', async (req, res) => {
     }
 });
 
+app.get('/logout', (req, res) => {
+    res.clearCookie('session'); 
+    res.redirect('/login'); 
+});
+
     
 app.get('/', async (req, res) => {
     try {
