@@ -42,7 +42,6 @@ app.use(async (req, res, next) => {
                 next();
             } else {
                 res.locals.loggedIn = true;
-                res.locals.email = decoded.email;
                 res.locals.userId = decoded.userId;
 
                 try {
@@ -50,6 +49,8 @@ app.use(async (req, res, next) => {
                     const user = await db.collection('users').findOne({ _id: res.locals.userId });
                     if (user) {
                         res.locals.full_name = user.f_name + ' ' + user.l_name;
+                        res.locals.employee_branch = user.branch
+                        res.locals.employee_type = user.employee_type
                     }
                 } catch (dbError) {
                     console.error("Error fetching user from MongoDB:", dbError);
@@ -163,15 +164,22 @@ app.get('/logout', (req, res) => {
     
 app.get('/', isAuthenticated,async (req, res) => {
     try {
-        // placeholder, hardcoded user and branch 
-        const user_id = "65822220bdd23af2f423260f"
-        const branch = "Champaign, IL"
+        // Function to build the match stage for weekly and monthly report based on date
+        function buildMatchStage(dateThreshold) {
+            let matchStage = { sale_date: { $gte: dateThreshold } };
+            if (res.locals.employee_type !== "Admin") {
+                matchStage["vehicle_info.branch_location"] = res.locals.employee_branch;
+            }
+            return matchStage;
+        }
 
         const one_week_ago = new Date('2023-12-17');
         // note: for display purpose, hardcoded dates of weekly and monthly report
         // please uncomment the codes below to get real-time weekly and monthly report
         // const one_week_ago = new Date();
         // one_week_ago.setDate(one_week_ago.getDate() - 7);
+
+        const weekly_matchStage = buildMatchStage(one_week_ago);
 
         const weekly_sale_stats = await db.collection('sale_orders').aggregate([
             {
@@ -185,13 +193,7 @@ app.get('/', isAuthenticated,async (req, res) => {
             {
                 $unwind: "$vehicle_info"
             },
-            { 
-                $match: { 
-                    sale_date: { $gte: one_week_ago }, 
-                    // placeholder, need change branch
-                    // "vehicle_info.branch_location": "Champaign, IL"
-                } 
-            },
+            { $match: weekly_matchStage },
             { $group: {
                 _id: null,
                 total_orders: { $sum: 1 },
@@ -204,10 +206,11 @@ app.get('/', isAuthenticated,async (req, res) => {
 
 
         const one_month_ago = new Date('2023-11-17');
-        // note: for display purpose, hardcoded dates of weekly and monthly report
-        // please uncomment the codes below to get real-time weekly and monthly report
+        // uncomment for real-time reports
         // const one_week_ago = new Date();
         // one_week_ago.setDate(one_week_ago.getDate() - 7);
+
+        const monthly_matchStage = buildMatchStage(one_month_ago);
 
         const monthly_sale_stats = await db.collection('sale_orders').aggregate([
             {
@@ -221,13 +224,7 @@ app.get('/', isAuthenticated,async (req, res) => {
             {
                 $unwind: "$vehicle_info"
             },
-            { 
-                $match: { 
-                    sale_date: { $gte: one_month_ago }, 
-                    // placeholder, need change branch
-                    // "vehicle_info.branch_location": "Champaign, IL"
-                } 
-            },
+            { $match: monthly_matchStage },
             { $group: {
                 _id: null,
                 total_orders: { $sum: 1 },
