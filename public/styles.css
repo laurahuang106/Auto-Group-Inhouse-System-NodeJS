@@ -163,11 +163,6 @@ tbody tr:nth-child(odd) {
     margin-right: 20px;
 }
 
-.filter-container h1 {
-    text-align: left;
-    font-size: 18px; 
-}
-
 .filter-container label {
     display: block;
     margin-bottom: 5px;
