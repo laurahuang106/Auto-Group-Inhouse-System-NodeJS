@@ -11,35 +11,38 @@
           <% } %>
         </div>
 
-        <div>
+        <div class="form-row">
           <label for="vin">VIN</label>
           <input type="text" name="vin" id="vin" />
         </div>
-        <div>
-          <label for="make">Make</label>
-          <input type="text" name="make" id="make" />
+        <div class="form-row">
+          <div class="form-col">
+            <label for="make">Make</label>
+            <input type="text" name="make" id="make" />
+          </div>
+          <div class="form-col">
+            <label for="model">Model</label>
+            <input type="text" name="model" id="model" />
+          </div>
         </div>
-        <div>
-          <label for="model">Model</label>
-          <input type="text" name="model" id="model" />
+        <div class="form-row">
+          <div class="form-col">
+            <label for="year">Year</label>
+            <input type="number" name="year" id="year" />
+          </div>
+          <div class="form-col">
+            <label for="mileage">Mileage</label>
+            <input type="number" name="mileage" id="mileage" />
+          </div>
         </div>
-        <div>
-          <label for="year">Year</label>
-          <input type="number" name="year" id="year" />
-        </div>
-        <div>
-          <label for="mileage">Mileage</label>
-          <input type="number" name="mileage" id="mileage" />
-        </div>
-        <div>
+        <div class="form-row">
           <label for="sale_date">Sale Date</label>
           <input type="datetime-local" name="sale_date" id="sale_date" />
         </div>
-        <div>
+        <div class="form-row">
           <label for="sale_price">Sale Price</label>
           <input type="number" name="sale_price" id="sale_price" />
         </div>
-
         <button type="submit">Submit</button>
       </form>
     </div>
