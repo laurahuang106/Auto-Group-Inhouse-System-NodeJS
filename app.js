@@ -814,3 +814,36 @@ app.post('/profile', isAuthenticated, async (req, res) => {
         res.status(500).send("Error updating profile");
     }
 });
+
+app.get('/employees', isAuthenticated, async (req, res) => {
+    const is_admin = res.locals.employee_type === 'Admin';
+    const user_statuses = ["Active", "Pending", "Inactive"];
+    const employees = await db.collection('users').find().toArray();
+
+    // format the date for each employee
+    const formattedEmployees = employees.map(employee => {
+        if (employee.date_of_birth) {
+            // Convert to Date object and format to YYYY-MM-DD
+            employee.date_of_birth = new Date(employee.date_of_birth).toISOString().split('T')[0];
+        }
+        return employee;
+    });
+
+    res.render('employees', {is_admin, user_statuses, employees:formattedEmployees});
+});
+
+app.post('/employees', isAuthenticated, async (req, res) => {
+    try {
+        const { employeeId, newStatus } = req.body;
+
+        await db.collection('users').updateOne(
+            { _id: employeeId },
+            { $set: { status: newStatus } }
+        );
+
+        res.redirect('/employees'); 
+    } catch (error) {
+        console.error("Error updating status:", error);
+        res.status(500).send("Internal server error");
+    }
+});

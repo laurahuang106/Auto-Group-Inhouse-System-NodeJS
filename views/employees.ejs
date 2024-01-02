@@ -1,0 +1,45 @@
+<%- include("./header.ejs") %>
+<body>
+  <div class="table-section">
+    <table>
+      <thead>
+        <tr>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Branch</th>
+          <th>Employee Type</th>
+          <th>Gender</th>
+          <th>Date of Birth</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% employees.forEach(employee => { %>
+        <tr>
+          <td><%= employee.f_name %></td>
+          <td><%= employee.l_name %></td>
+          <td><%= employee.email %></td>
+          <td><%= employee.phone %></td>
+          <td><%= employee.branch %></td>
+          <td><%= employee.employee_type %></td>
+          <td><%= employee.gender %></td>
+          <td><%= employee.date_of_birth %></td>
+          <td>
+            <form action="/employees" method="post">
+                <input type="hidden" name="employeeId" value="<%= employee._id %>" />
+                <select name="newStatus">
+                    <% user_statuses.forEach(function(user_status) { %>
+                        <option value="<%= user_status %>" <% if (employee.status === user_status) { %>selected<% } %>><%= user_status %></option>
+                    <% }); %>
+                </select>
+                <button type="submit">Update</button>
+            </form>
+          </td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</body>
