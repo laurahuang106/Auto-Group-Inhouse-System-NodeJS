@@ -243,18 +243,35 @@ app.get('/', isAuthenticated,async (req, res) => {
 
 app.get('/orders', isAuthenticated, async (req, res) => {
     try {
+        const is_admin = res.locals.employee_type === 'Admin';
+        
         // fetch filters data 
         const branches = await db.collection('users').distinct('branch');
         const sale_dates = await db.collection('sale_orders').distinct('sale_date');
         const makes = await db.collection('vehicles').distinct('make');
         const models = await db.collection('vehicles').distinct('model');
-        const sales_person_fullnames = await db.collection('users').aggregate([
-            {
-                $project: {
-                    fullname: { $concat: ["$f_name", " ", "$l_name"] }
+        let sales_person_fullnames;
+        if (is_admin) {
+            sales_person_fullnames = await db.collection('users').aggregate([
+                {
+                    $project: {
+                        fullname: { $concat: ["$f_name", " ", "$l_name"] }
+                    }
                 }
-            }
-        ]).toArray();
+            ]).toArray();
+        } else {
+            sales_person_fullnames = await db.collection('users').aggregate([
+                {
+                    $match: { branch: res.locals.employee_branch }
+                },
+                {
+                    $project: {
+                        fullname: { $concat: ["$f_name", " ", "$l_name"] }
+                    }
+                }
+            ]).toArray();
+        }
+
         /// find the minimum and maximum year of production
         const yearRangeResult = await db.collection('vehicles').aggregate([
             {
@@ -280,7 +297,6 @@ app.get('/orders', isAuthenticated, async (req, res) => {
             mileages.push(i);
         }
 
-
         // add user options to filterCritiria to filter table
         let filterCriteria = {};
 
@@ -297,7 +313,11 @@ app.get('/orders', isAuthenticated, async (req, res) => {
             filterCriteria['sales_person_info.l_name'] = l_name.join(" "); 
         }
 
-        if (req.query.branch_dropdown && req.query.branch_dropdown !== '') {
+        // additional filter based on user type
+        if (!is_admin) {
+            filterCriteria['sales_person_info.branch'] = res.locals.employee_branch;
+        }
+        if (is_admin && req.query.branch_dropdown && req.query.branch_dropdown !== '') {
             filterCriteria['sales_person_info.branch'] = req.query.branch_dropdown;
         }
 
@@ -381,7 +401,8 @@ app.get('/orders', isAuthenticated, async (req, res) => {
             mileages,
             branches,
             sales_person_fullnames,
-            query: req.query 
+            query: req.query,
+            is_admin,
         });
     } catch (error) {
         res.status(500).send(error.message);
