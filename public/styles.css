@@ -5,9 +5,10 @@ body {
     margin: 0;
     padding: 0;
     background-color: #f4f4f4;
+    color: #333; 
 }
 
-h1 {
+h1, h2, h3, h4 {
     color: #BD1C1D;
     text-align: center;
     margin-top: 20px;
@@ -39,6 +40,45 @@ li a {
 
 li a:hover {
     background-color: #911c1b;
+}
+
+button[type="submit"] {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #BD1C1D;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+button[type="submit"]:hover {
+    background-color: #911c1b;
+}
+
+/* table styles*/
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 20px;
+    font-size: 14px; 
+}
+
+th, td {
+    text-align: left;
+    padding: 8px;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #BD1C1D;
+    color: white;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #f9f9f9;
 }
 
 /* welcome message in header  */
@@ -108,37 +148,48 @@ li a:hover {
     flex-basis: 40%; 
 }
 
-/* Container for search and filters */
-.search-filter-container {
+
+/* orders page and inventory page */
+.main-container {
+    display: flex;
+    width: 100%;
+}
+.filter-container {
     width: 20%;
-    background-color: #e9e9e9; /* Light gray background */
+    background-color: #e9e9e9;
     padding: 15px;
     box-sizing: border-box;
+    font-size: 14px; 
+    margin-right: 20px;
 }
 
-/* Search and Filter Inputs */
-.search-filter-container input[type="text"],
-.search-filter-container select {
+.filter-container h1 {
+    text-align: left;
+    font-size: 18px; 
+}
+
+.filter-container label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+.filter-container input[type="text"],
+.filter-container input[type="date"],
+.filter-container select {
     width: 100%;
     padding: 8px;
     margin-bottom: 10px;
     border-radius: 4px;
     border: 1px solid #ddd;
+    background-color: white;
+    box-sizing: border-box;
 }
 
-.search-filter-container input[type="text"]{
-    width: calc(100% - 16px);
-}
-
-/* Main Content Container */
-.main-container {
-    display: flex;
-    justify-content: space-between;
-}
-
-.report-section {
-    width: 78%; 
-    margin-left: 2%; 
+.table-section {
+    width: 80%;
+    margin-left: 2%;
+    margin-right: 2%;
 }
 
 table {
@@ -161,6 +212,7 @@ th {
 tbody tr:nth-child(odd) {
     background-color: #f9f9f9;
 }
+
 
 .profile-container {
     width: 80%;
@@ -213,22 +265,6 @@ button[type="submit"]:hover {
     background-color: #911c1b;
 }
 
-/* Responsive Design */
-@media screen and (max-width: 768px) {
-    .main-container {
-        flex-direction: column;
-    }
-
-    .search-filter-container,
-    .home-section {
-        width: 100%;
-        margin-bottom: 20px;
-    }
-
-    ul {
-        flex-direction: column; /* Stack items vertically on smaller screens */
-    }
-}
 
 
 /* for reports pages */
@@ -278,5 +314,6 @@ button[type="submit"]:hover {
 .reports_content form {
     width: 50%; 
 }
+
 
 
