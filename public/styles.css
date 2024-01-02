@@ -93,11 +93,11 @@ tbody tr:nth-child(odd) {
 
 /* home page  */
 .home-container {
-    margin-top: 30px; /* Top margin, adjust as needed */
+    margin-top: 30px; 
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
-    min-height: 70vh; /* 80% of the viewport height */
+    min-height: 70vh; 
 }
 
 .home-section {
@@ -105,11 +105,11 @@ tbody tr:nth-child(odd) {
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    width: calc(50% - 40px); /* Adjust width for individual cards */
+    width: calc(50% - 40px); 
     margin: 10px;
     box-sizing: border-box;
-    height: calc(70vh - 20px); /* 80% of the viewport height minus some margin */
-    overflow-y: auto; /* Enable scroll if content overflows */
+    height: calc(70vh - 20px); 
+    overflow-y: auto; 
 }
 
 .home-section h1 {
@@ -265,24 +265,25 @@ button[type="submit"]:hover {
 /* for reports pages */
 .reports_container {
     display: flex;
-    min-height: calc(100vh - 60px)
 }
 
-.reprots_sidebar{
+.reports_sidebar{
     width: 20%;
-    height: calc(100% - 50px); 
     background-color: #e9e9e9;; 
     top: 50px; 
     left: 0;
     z-index: 500; 
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .reports_sidebar_contents {
-    flex: 0 0 200px; 
     display: flex;
     flex-direction: column;
-    height: 100%; 
-    background-color: #e9e9e9; 
+    background-color: #fff; 
+    border-radius: 8px; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+    overflow: hidden; 
 }
 
 .reports_sidebar_contents ul {
@@ -294,7 +295,7 @@ button[type="submit"]:hover {
 }
 
 .reports_sidebar_contents ul li {
-    padding: 10px; 
+    padding: 70px; 
     display: block; 
     border-bottom: 1px solid #ccc; 
 }
@@ -314,7 +315,7 @@ button[type="submit"]:hover {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 20px;
     box-sizing: border-box;
-    margin: 0 auto; 
+    margin-bottom: 20px;
 }
 
 .reports_content form div {
