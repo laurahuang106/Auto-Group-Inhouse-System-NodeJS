@@ -23,14 +23,16 @@
                         <option value="<%= sales_person_fullname.fullname %>" <% if (query.employee_dropdown === sales_person_fullname.fullname) { %>selected<% } %>><%= sales_person_fullname.fullname %></option>
                     <% }); %>
                 </select>
-        
-                <label for="branch_dropdown">Branch</label>
-                <select name="branch_dropdown" id="branch_dropdown">
-                    <option value="" <% if (!query.branch_dropdown) { %>selected<% } %>></option>
-                    <% branches.forEach(function(branch) { %>
-                        <option value="<%= branch %>" <% if (query.branch_dropdown === branch) { %>selected<% } %>><%= branch %></option>
-                    <% }); %>
-                </select>
+                
+                <% if (is_admin) { %>
+                    <label for="branch_dropdown">Branch</label>
+                    <select name="branch_dropdown" id="branch_dropdown">
+                        <option value="" <% if (!query.branch_dropdown) { %>selected<% } %>></option>
+                        <% branches.forEach(function(branch) { %>
+                            <option value="<%= branch %>" <% if (query.branch_dropdown === branch) { %>selected<% } %>><%= branch %></option>
+                        <% }); %>
+                    </select>
+                <% } %>
         
                 <label for="make_dropdown">Make</label>
                 <select name="make_dropdown" id="make_dropdown">
