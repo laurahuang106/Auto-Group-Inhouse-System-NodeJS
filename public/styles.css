@@ -10,7 +10,8 @@ body {
 h1 {
     color: #BD1C1D;
     text-align: center;
-    margin-bottom: 20px;
+    margin-top: 20px;
+    margin-bottom: 10px;
 }
 
 ul {
@@ -40,8 +41,71 @@ li a:hover {
     background-color: #911c1b;
 }
 
-.report-container{
-    display: flex
+/* welcome message in header  */
+.welcome-message {
+    text-align: center; 
+    font-family: 'Arial', sans-serif; 
+    font-size: 16px; 
+    color: #333; 
+    margin-bottom: 20px; 
+}
+
+
+/* home page  */
+.home-container {
+    margin-top: 30px; /* Top margin, adjust as needed */
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    min-height: 70vh; /* 80% of the viewport height */
+}
+
+.home-section {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: calc(50% - 40px); /* Adjust width for individual cards */
+    margin: 10px;
+    box-sizing: border-box;
+    height: calc(70vh - 20px); /* 80% of the viewport height minus some margin */
+    overflow-y: auto; /* Enable scroll if content overflows */
+}
+
+.home-section h1 {
+    color: #BD1C1D;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.home-section div {
+    margin-bottom: 15px;
+}
+
+.home-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.home-section h3,
+.home-section h4 {
+    margin: 0;
+    padding: 5px;
+}
+
+.home-section h3 {
+    color: #333;
+    font-size: 18px;
+    flex-grow: 1;
+}
+
+.home-section h4 {
+    color: #555;
+    font-size: 22px;
+    font-weight: bold;
+    flex-basis: 40%; 
 }
 
 /* Container for search and filters */
@@ -156,7 +220,7 @@ button[type="submit"]:hover {
     }
 
     .search-filter-container,
-    .report-section {
+    .home-section {
         width: 100%;
         margin-bottom: 20px;
     }
