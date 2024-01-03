@@ -1,5 +1,6 @@
 <%- include("./header.ejs") %>
 <body>
+  <% if (employee_type === "Admin") {%>
   <div class="employee-table">
     <table>
       <thead>
@@ -42,4 +43,7 @@
       </tbody>
     </table>
   </div>
+  <% } else { %>
+  <h4>You don't have permission to view this page.</h4>
+  <% } %>
 </body>

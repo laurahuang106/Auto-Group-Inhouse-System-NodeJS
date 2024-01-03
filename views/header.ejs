@@ -39,6 +39,9 @@
       <li><a href="/inventory">Inventory</a></li>
       <li><a href="/reports/buyin_report">Report</a></li>
       <li><a href="/profile">Profile</a></li>
+      <% if (employee_type === "Admin") {%>
+      <li><a href="/employees">Employees</a></li>
+      <% } %>
       <li><a href="/logout">Logout</a></li>
     </ul>
     <% } %>
