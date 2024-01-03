@@ -1,6 +1,6 @@
 <%- include("./header.ejs") %>
 <body>
-  <div class="table-section">
+  <div class="employee-table">
     <table>
       <thead>
         <tr>
@@ -34,7 +34,7 @@
                         <option value="<%= user_status %>" <% if (employee.status === user_status) { %>selected<% } %>><%= user_status %></option>
                     <% }); %>
                 </select>
-                <button type="submit">Update</button>
+                <button type="submit" class="small-button">Update</button>
             </form>
           </td>
         </tr>
