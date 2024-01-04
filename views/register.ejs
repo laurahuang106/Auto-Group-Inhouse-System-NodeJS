@@ -2,65 +2,90 @@
 <body>
   <div>
     <div>
-      <form action="/register" method="post">
+      <form action="/register" method="post" class="form-container">
         <div>
           <% if (status === 'success') { %>
           <h4>Register successfully!</h4>
           <% } %>
         </div>
 
-        <div>
-          <label for="email">Email</label>
-          <input type="text" name="email" id="email" required />
-        </div>
-        <div>
-          <label for="password">Password</label>
-          <input type="text" name="password" id="password" required />
-        </div>
-        <div>
-          <label for="f_name">First Name</label>
-          <input type="text" name="f_name" id="f_name" required />
-        </div>
-        <div>
-          <label for="l_name">Last Name</label>
-          <input type="text" name="l_name" id="l_name" required />
-        </div>
-        <div>
-          <label for="phone">Phone</label>
-          <input type="text" name="phone" id="phone" required />
-        </div>
-        <div>
-          <label for="branch_dropdown">Branch</label>
-          <select name="branch_dropdown" id="branch_dropdown" required>
-            <option value="" disabled selected></option>
-            <% branches.forEach(function(branch) { %>
-            <option value="<%= branch %>"><%= branch %></option>
-            <% }); %>
-          </select>
-        </div>
-        <div>
-          <label for="emp_type_dropdown">Employee Type</label>
-          <select name="emp_type_dropdown" id="emp_type_dropdown" required>
-            <option value="" disabled selected></option>
-            <% employee_types.forEach(function(employee_type) { %>
-            <option value="<%= employee_type %>"><%= employee_type %></option>
-            <% }); %>
-          </select>
-        </div>
-        <div>
-          <label for="gender">Gender</label>
-          <select name="gender_dropdown" id="gender_dropdown" required>
-            <option value="" disabled selected></option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-          </select>
-        </div>
-        <div>
-          <label for="date_of_birth">Date of birth</label>
-          <input type="date" name="date_of_birth" id="date_of_birth" required />
+        <div class="form-row">
+          <div class="form-col">
+            <label for="email">Email</label>
+            <input type="text" name="email" id="email" required />
+          </div>
+          <div class="form-col">
+            <label for="password">Password</label>
+            <input type="text" name="password" id="password" required />
+          </div>
         </div>
 
-        <button type="submit">Submit</button>
+        <div class="form-row">
+          <div class="form-col">
+            <label for="f_name">First Name</label>
+            <input type="text" name="f_name" id="f_name" required />
+          </div>
+          <div class="form-col">
+            <label for="l_name">Last Name</label>
+            <input type="text" name="l_name" id="l_name" required />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label for="phone">Phone</label>
+          <input
+            type="text"
+            name="phone"
+            id="phone"
+            placeholder="xxx-xxx-xxxx"
+            required
+          />
+        </div>
+
+        <div class="form-row">
+          <div class="form-col">
+            <label for="branch_dropdown">Branch</label>
+            <select name="branch_dropdown" id="branch_dropdown" required>
+              <option value="" disabled selected></option>
+              <% branches.forEach(function(branch) { %>
+              <option value="<%= branch %>"><%= branch %></option>
+              <% }); %>
+            </select>
+          </div>
+          <div class="form-col">
+            <label for="emp_type_dropdown">Employee Type</label>
+            <select name="emp_type_dropdown" id="emp_type_dropdown" required>
+              <option value="" disabled selected></option>
+              <% employee_types.forEach(function(employee_type) { %>
+              <option value="<%= employee_type %>"><%= employee_type %></option>
+              <% }); %>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-col">
+            <label for="gender">Gender</label>
+            <select name="gender_dropdown" id="gender_dropdown" required>
+              <option value="" disabled selected></option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          </div>
+          <div class="form-col">
+            <label for="date_of_birth">Date of birth</label>
+            <input
+              type="date"
+              name="date_of_birth"
+              id="date_of_birth"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="button-container">
+          <button type="submit" class="register-button">Submit</button>
+        </div>
       </form>
     </div>
   </div>

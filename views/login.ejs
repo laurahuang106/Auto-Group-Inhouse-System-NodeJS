@@ -1,18 +1,22 @@
 <%- include("./header") %>
 <body>
   <div>
-    <form action="/login" method="post" id="login_form">
-      <div id="error-message"></div>
-      <div>
-        <label for="email">Email</label>
-        <input type="text" name="email" id="email" required />
-      </div>
-      <div>
-        <label for="password">Password</label>
-        <input type="text" name="password" id="password" required />
-      </div>
+    <form action="/login" method="post" id="login_form" class="form-container">
+      <div class="login-form">
+        <div id="error-message"></div>
+        <div>
+          <label for="email">Email</label>
+          <input type="text" name="email" id="email" required />
+        </div>
+        <div>
+          <label for="password">Password</label>
+          <input type="text" name="password" id="password" required />
+        </div>
 
-      <button type="submit">Sign in</button>
+        <div class="button-container">
+          <button type="submit" class="login-button">Sign in</button>
+        </div>
+      </div>
     </form>
   </div>
   <script src="/login.js"></script>
