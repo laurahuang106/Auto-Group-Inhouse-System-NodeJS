@@ -825,6 +825,16 @@ app.post('/profile', isAuthenticated, async (req, res) => {
             { _id: user_id },
             { $set: { email: new_email, phone: new_phone } }
         );
+
+        try {
+            await admin.auth().updateUser(user_id, {
+                email: new_email
+            });
+        } catch (firebaseError) {
+            console.error("Error updating email in Firebase:", firebaseError);
+            return res.status(500).send("Error updating email in Firebase");
+        }
+
         res.redirect('/profile');
     } catch (error) {
         console.error("Error updating user profile:", error);
