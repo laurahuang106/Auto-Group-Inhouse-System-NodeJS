@@ -23,10 +23,18 @@ app.use(cookieParser());
 
 // Middleware to check if the user is logged in
 function isAuthenticated(req, res, next) {
-    if (!req.cookies.session) {
+    const token = req.cookies.session;
+    if (!token) {
         return res.redirect('/login');
     }
-    next(); 
+
+    jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decoded) => {
+        if (err) {
+            // Token is invalid or expired
+            return res.redirect('/login');
+        }
+        next();
+    });
 }
 
 // Global middleware for setting variables and checking authentication
@@ -162,7 +170,7 @@ app.get('/logout', (req, res) => {
 });
 
     
-app.get('/', isAuthenticated,async (req, res) => {
+app.get('/', isAuthenticated, async (req, res) => {
     try {
         // Function to build the match stage for weekly and monthly report based on date
         function buildMatchStage(dateThreshold) {
