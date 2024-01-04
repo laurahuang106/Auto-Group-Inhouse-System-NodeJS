@@ -121,6 +121,7 @@ app.post('/register', async (req, res) => {
             employee_type: emp_type_dropdown,
             gender: gender_dropdown,
             date_of_birth: new Date(date_of_birth),
+            status: "Pending",
         });
         res.redirect('/register/success?status=success');
     } catch (error) {
