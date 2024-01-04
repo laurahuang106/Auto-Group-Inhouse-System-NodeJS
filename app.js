@@ -339,17 +339,21 @@ app.get('/orders', isAuthenticated, async (req, res) => {
         }
 
         if (req.query.min_year_dropdown && req.query.min_year_dropdown !== '') {
-            filterCriteria['vehicle_info.year_of_production'] = { $gte: parseInt(req.query.min_year_dropdown) };
+            filterCriteria['vehicle_info.year_of_production'] = filterCriteria['vehicle_info.year_of_production'] || {};
+            filterCriteria['vehicle_info.year_of_production'].$gte = parseInt(req.query.min_year_dropdown);
         }
         if (req.query.max_year_dropdown && req.query.max_year_dropdown !== '') {
-            filterCriteria['vehicle_info.year_of_production'] = { $lte: parseInt(req.query.max_year_dropdown) };
+            filterCriteria['vehicle_info.year_of_production'] = filterCriteria['vehicle_info.year_of_production'] || {};
+            filterCriteria['vehicle_info.year_of_production'].$lte = parseInt(req.query.max_year_dropdown);
         }
 
         if (req.query.min_mile_dropdown && req.query.min_mile_dropdown !== '') {
-            filterCriteria['vehicle_info.mileage'] = { $gte: parseInt(req.query.min_mile_dropdown) };
+            filterCriteria['vehicle_info.mileage'] = filterCriteria['vehicle_info.mileage'] || {};
+            filterCriteria['vehicle_info.mileage'].$gte = parseInt(req.query.min_mile_dropdown);
         }
         if (req.query.max_mile_dropdown && req.query.max_mile_dropdown !== '') {
-            filterCriteria['vehicle_info.mileage'] = { $lte: parseInt(req.query.max_mile_dropdown) };
+            filterCriteria['vehicle_info.mileage'] = filterCriteria['vehicle_info.mileage'] || {};
+            filterCriteria['vehicle_info.mileage'].$lte = parseInt(req.query.max_mile_dropdown);
         }
 
         const sortCriteria = { order_date: -1, make: -1, model: -1, year: -1, mileage: -1, sale_price: -1, profit: -1} 
@@ -506,19 +510,23 @@ app.get('/inventory', isAuthenticated, async (req, res) => {
         if (req.query.model_dropdown && req.query.model_dropdown !== '') {
             filterCriteria['vehicle_info.model'] = req.query.model_dropdown;
         }
-
+        
         if (req.query.min_year_dropdown && req.query.min_year_dropdown !== '') {
-            filterCriteria['vehicle_info.year_of_production'] = { $gte: parseInt(req.query.min_year_dropdown) };
+            filterCriteria['vehicle_info.year_of_production'] = filterCriteria['vehicle_info.year_of_production'] || {};
+            filterCriteria['vehicle_info.year_of_production'].$gte = parseInt(req.query.min_year_dropdown);
         }
         if (req.query.max_year_dropdown && req.query.max_year_dropdown !== '') {
-            filterCriteria['vehicle_info.year_of_production'] = { $lte: parseInt(req.query.max_year_dropdown) };
+            filterCriteria['vehicle_info.year_of_production'] = filterCriteria['vehicle_info.year_of_production'] || {};
+            filterCriteria['vehicle_info.year_of_production'].$lte = parseInt(req.query.max_year_dropdown);
         }
 
         if (req.query.min_mile_dropdown && req.query.min_mile_dropdown !== '') {
-            filterCriteria['vehicle_info.mileage'] = { $gte: parseInt(req.query.min_mile_dropdown) };
+            filterCriteria['vehicle_info.mileage'] = filterCriteria['vehicle_info.mileage'] || {};
+            filterCriteria['vehicle_info.mileage'].$gte = parseInt(req.query.min_mile_dropdown);
         }
         if (req.query.max_mile_dropdown && req.query.max_mile_dropdown !== '') {
-            filterCriteria['vehicle_info.mileage'] = { $lte: parseInt(req.query.max_mile_dropdown) };
+            filterCriteria['vehicle_info.mileage'] = filterCriteria['vehicle_info.mileage'] || {};
+            filterCriteria['vehicle_info.mileage'].$lte = parseInt(req.query.max_mile_dropdown);
         }
 
         const sortCriteria = { buyin_date: -1, VIN: -1, make: -1, model: -1, year: -1, mileage: -1, buyin_price: -1} 
