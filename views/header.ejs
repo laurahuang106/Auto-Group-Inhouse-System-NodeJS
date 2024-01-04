@@ -25,7 +25,10 @@
     </script>
   </head>
   <body>
-    <h1>CAC Sales System</h1>
+    <div class="<% if (!loggedIn) { %>header-container<% } %>">
+      <h1>CAC Sales System</h1>
+    </div>
+
     <% if (!loggedIn) { %>
     <ul>
       <li><a href="/login">Login</a></li>
