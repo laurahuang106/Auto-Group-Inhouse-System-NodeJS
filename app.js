@@ -155,6 +155,13 @@ app.post('/verifyToken', async (req, res) => {
         const userId = decodedToken.uid;
         const userEmail = decodedToken.email;
 
+        // Check user status in MongoDB
+        const user = await db.collection('users').findOne({ _id: userId });
+        if (!user || user.status !== 'Active') {
+            // User not found or not active
+            return res.status(401).json({ success: false, error: 'Account not active or does not exist' });
+        }
+
         // Create a JWT for session management
         const sessionToken = jwt.sign({ userId: userId, email: userEmail }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
         res.cookie('session', sessionToken, { httpOnly: true, secure: true }); 
