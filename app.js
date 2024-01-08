@@ -176,19 +176,26 @@ app.get('/', isAuthenticated, async (req, res) => {
         // Function to build the match stage for weekly and monthly report based on date
         function buildMatchStage(dateThreshold) {
             let matchStage = { sale_date: { $gte: dateThreshold } };
+
             if (res.locals.employee_type !== "Admin") {
                 matchStage["vehicle_info.branch_location"] = res.locals.employee_branch;
             }
             return matchStage;
         }
 
-        const one_week_ago = new Date('2023-12-17');
         // note: for display purpose, hardcoded dates of weekly and monthly report
         // please uncomment the codes below to get real-time weekly and monthly report
-        // const one_week_ago = new Date();
-        // one_week_ago.setDate(one_week_ago.getDate() - 7);
+        // const today = new Date();
+
+        // Get the date of the Monday of the current week
+        const today = new Date('2023-12-20'); // !remove the date inside () to get real-time data
+        today.setHours(23, 59, 59, 999);
+        const dayOfWeek = today.getDay();
+        const one_week_ago = new Date(today);
+        one_week_ago.setDate(today.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 0));
 
         const weekly_matchStage = buildMatchStage(one_week_ago);
+        weekly_matchStage.sale_date.$lte = today; // !comment out this line to get real-time data
 
         const weekly_sale_stats = await db.collection('sale_orders').aggregate([
             {
@@ -214,12 +221,13 @@ app.get('/', isAuthenticated, async (req, res) => {
         const weekly_sale = weekly_sale_stats[0] || { total_orders: 0, total_amount: 0, total_profit: 0 };
 
 
-        const one_month_ago = new Date('2023-11-17');
         // uncomment for real-time reports
-        // const one_week_ago = new Date();
-        // one_week_ago.setDate(one_week_ago.getDate() - 7);
+        // const one_month_ago = new Date();
+        const one_month_ago = new Date('2023-12-20');
+        one_month_ago.setDate(0);
 
         const monthly_matchStage = buildMatchStage(one_month_ago);
+        monthly_matchStage.sale_date.$lte = new Date("2023-12-31"); // comment out this line to get real-time data
 
         const monthly_sale_stats = await db.collection('sale_orders').aggregate([
             {
